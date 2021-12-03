@@ -18,12 +18,12 @@ public class Tree : MonoBehaviour
     Vector3 size;
     int attractorsAmount;
 
-    public void Init(Vector3 rootPos, float height, Vector3 size, int attractorsAmount)
+    public void Init(Vector3 rootPos, int attractorsAmount, Unit[] crownUnits)
     {
         this.rootPos = rootPos;
-        this.height = height;
-        this.size = size;
         this.attractorsAmount = attractorsAmount;
+
+        //
     }
 
     private void Start()
@@ -36,9 +36,12 @@ public class Tree : MonoBehaviour
         // Add root node
         nodes.Add(new Node(null, rootPos));
 
+        Vector3 crownPos = rootPos + Vector3.up * height;
+
         for (int i = 0; i < 500; i++)
         {
-            Attractor attractor = new Attractor(new Vector3(Random.Range(-size.x, size.x), Random.Range(-size.y, size.y), Random.Range(-size.z, size.z)));
+            Vector3 attractorOffset = new Vector3(Random.Range(-size.x, size.x), Random.Range(-size.y, size.y), Random.Range(-size.z, size.z));
+            Attractor attractor = new Attractor();
             attractors.Add(attractor);
         }
     }

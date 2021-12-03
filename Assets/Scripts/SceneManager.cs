@@ -19,18 +19,6 @@ public class SceneManager : MonoBehaviour
 
     public Unit[] units;
 
-    public struct Unit
-    {
-        public Unit(Vector3 position, bool isOccupied)
-        {
-            this.position = position;
-            this.isOccupied = isOccupied;
-        }
-
-        public Vector3 position;
-        public bool isOccupied;
-    }
-
     private void Start()
     {
         camera = Camera.main;
@@ -69,15 +57,38 @@ public class SceneManager : MonoBehaviour
             if(Physics.Raycast(ray, out hit))
             {
                 print("HIT at " + hit.point);
-                TryGenerateTree(hit.point);
+                TryGenerateTree(hit.point - Vector3.up * .001f);
             }
         }
     }
 
     private void TryGenerateTree(Vector3 position)
     {
-        position.y = Mathf.Floor(position.y);
-        
+        Vector3 crownPos = position + Vector3.up * 10f;
+        Unit[] crownUnits = GetFreeUnits(crownPos, Vector3.one * 2f);
+    }
+
+    private Unit[] GetFreeUnits(Vector3 position, Vector3 halfExtents)
+    {
+        List<Unit> freeUnits = new List<Unit>();
+
+        for(float i =-halfExtents.x; i < halfExtents.x; i += unitSize)
+        {
+            for (float j = -halfExtents.y; j < halfExtents.y; j += unitSize)
+            {
+                for (float k = -halfExtents.z; k < halfExtents.z; k += unitSize)
+                {
+                    Vector3 fixedPos = position + new Vector3(i, j, k);
+                    Unit unit = units[WorldToGrid(fixedPos)];
+                    if(!unit.isOccupied)
+                    {
+                        freeUnits.Add(unit);
+                    }
+                }
+            }
+        }
+
+        return freeUnits.ToArray();
     }
 
     private int WorldToGrid(Vector3 worldPos)
