@@ -6,44 +6,43 @@ public class Tree : MonoBehaviour
     public float killDistance;
     public float attractionDistance;
     public float segmentLength;
-
-    public GameObject attractorDebug;
+    public float unitHalfSize;
+    public int attractorsAmount;
 
     List<Attractor> attractors = new List<Attractor>();
     List<Node> nodes = new List<Node>();
 
-    // Init Vars
-    Vector3 rootPos;
-    float height;
-    Vector3 size;
-    int attractorsAmount;
-
-    public void Init(Vector3 rootPos, int attractorsAmount, Unit[] crownUnits)
+    public void Init(Vector3 rootPos, Unit[] crownUnits)
     {
-        this.rootPos = rootPos;
-        this.attractorsAmount = attractorsAmount;
+        // Position tree at node
+        transform.position = rootPos;
 
-        //
-    }
-
-    private void Start()
-    {
-
-    }
-
-    private void BuildTree()
-    {
         // Add root node
         nodes.Add(new Node(null, rootPos));
 
-        Vector3 crownPos = rootPos + Vector3.up * height;
+        int amountPerUnit = attractorsAmount / crownUnits.Length;
 
-        for (int i = 0; i < 500; i++)
+        foreach(Unit unit in crownUnits)
         {
-            Vector3 attractorOffset = new Vector3(Random.Range(-size.x, size.x), Random.Range(-size.y, size.y), Random.Range(-size.z, size.z));
-            Attractor attractor = new Attractor();
-            attractors.Add(attractor);
+            for(int i=0; i< amountPerUnit; i++)
+            {
+                Vector3 attractorPos = unit.position + new Vector3(Random.Range(-unitHalfSize, unitHalfSize),
+                    Random.Range(-unitHalfSize, unitHalfSize), Random.Range(-unitHalfSize, unitHalfSize));
+                Attractor attractor = new Attractor(attractorPos);
+                attractors.Add(attractor);
+                Instantiate(new GameObject("Attractor"), attractorPos, Quaternion.identity, transform);
+            }
         }
+    }
+
+    public void SetParams(float killDistance, float attractionDistance, float segmentLength, int attractorsAmount, float unitHalfSize)
+    {
+        this.killDistance = killDistance;
+        this.attractionDistance = attractionDistance;
+        this.segmentLength = segmentLength;
+
+        this.attractorsAmount = attractorsAmount;
+        this.unitHalfSize = unitHalfSize;
     }
 
     private void Update()
@@ -77,6 +76,11 @@ public class Tree : MonoBehaviour
             {
                 attractors.RemoveAt(i);
             }
+        }
+
+        if(attractors.Count == 0)
+        {
+            // BUILT
         }
     }
 

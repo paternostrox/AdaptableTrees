@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneManager : MonoBehaviour
+public class SceneManager : Singleton<SceneManager>
 {
     Camera camera;
 
@@ -16,13 +16,27 @@ public class SceneManager : MonoBehaviour
 
     public bool showOccupied = true;
     public bool showFree = false;
+    public bool showLastCrown = false;
 
     public Unit[] units;
+    public Unit[] lastCrown;
+
+    public float treeHeight = 10f;
+    public float treeSize = 2f;
+    public GameObject treePrefab;
+
+    public float nodeKillDistance = .2f;
+    public float nodeAttractionDistance = 10f;
+    public float nodeSegmentLength = .1f;
+    // jitter to avoid getting stuck
+    public float nodeJitterAmount = .02f;
+
+    public int attractorsAmount = 100;
 
     private void Start()
     {
         camera = Camera.main;
-        units = new Unit[size.x * size.y * size.z];
+        units = new Unit[(int) (size.x * size.y * size.z / unitSize)];
         Vector3 halfSize = size / 2;
         halfSize.y = 0;
         offset = bottomCenter - halfSize;
@@ -33,7 +47,7 @@ public class SceneManager : MonoBehaviour
     {
         float halfUnitSize = unitSize / 2;
         Vector3 halfUnitSizeVec = Vector3.one * halfUnitSize * .99f;
-        for (float i=halfUnitSize; i<size.x; i+=unitSize)
+        for (float i = halfUnitSize; i < size.x; i+=unitSize)
         {
             for (float j = halfUnitSize; j < size.y; j += unitSize)
             {
@@ -48,6 +62,11 @@ public class SceneManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        MouseInteraction();
+    }
+
     private void MouseInteraction()
     {
         if(Input.GetMouseButtonDown(0))
@@ -57,15 +76,20 @@ public class SceneManager : MonoBehaviour
             if(Physics.Raycast(ray, out hit))
             {
                 print("HIT at " + hit.point);
-                TryGenerateTree(hit.point - Vector3.up * .001f);
+                TryGenerateTree(hit.point + Vector3.up * .001f);
             }
         }
     }
 
     private void TryGenerateTree(Vector3 position)
     {
-        Vector3 crownPos = position + Vector3.up * 10f;
-        Unit[] crownUnits = GetFreeUnits(crownPos, Vector3.one * 2f);
+        Vector3 fixedPos = units[WorldToGrid(position)].position;
+        Vector3 crownPos = fixedPos + Vector3.up * treeHeight;
+        Unit[] crownUnits = GetFreeUnits(crownPos, Vector3.one * treeSize);
+        Tree tree = Instantiate(treePrefab, transform).GetComponent<Tree>();
+        tree.SetParams(nodeKillDistance, nodeAttractionDistance, nodeSegmentLength, attractorsAmount, unitSize / 2);
+        tree.Init(fixedPos, crownUnits);
+        lastCrown = crownUnits;
     }
 
     private Unit[] GetFreeUnits(Vector3 position, Vector3 halfExtents)
@@ -94,7 +118,7 @@ public class SceneManager : MonoBehaviour
     private int WorldToGrid(Vector3 worldPos)
     {
         worldPos -= offset;
-        return Mathf.FloorToInt(worldPos.x) + size.x * (Mathf.FloorToInt(worldPos.y) + size.y * Mathf.FloorToInt(worldPos.z));
+        return Mathf.FloorToInt(worldPos.x) + size.x * (Mathf.FloorToInt(worldPos.y) + size.y * Mathf.FloorToInt(worldPos.z)); // Tried to divide by unit size, didnt work
     }
 
     private void OnDrawGizmos()
@@ -121,6 +145,15 @@ public class SceneManager : MonoBehaviour
                     Gizmos.color = freeColor;
                     Gizmos.DrawCube(units[i].position, unitSizeVec);
                 }
+            }
+        }
+
+        if (showLastCrown && lastCrown != null)
+        {
+            for (int i = 0; i < lastCrown.Length; i++)
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawCube(lastCrown[i].position, unitSizeVec);
             }
         }
     }
