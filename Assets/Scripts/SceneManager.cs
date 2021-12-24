@@ -36,7 +36,7 @@ public class SceneManager : Singleton<SceneManager>
     private void Start()
     {
         camera = Camera.main;
-        units = new Unit[(int) (size.x * size.y * size.z / unitSize)];
+        units = new Unit[Mathf.RoundToInt(size.x * size.y * size.z / Mathf.Pow(unitSize,3))];
         Vector3 halfSize = size / 2;
         halfSize.y = 0;
         offset = bottomCenter - halfSize;
@@ -45,7 +45,7 @@ public class SceneManager : Singleton<SceneManager>
 
     private void ProcessLevel()
     {
-        float halfUnitSize = unitSize / 2;
+        float halfUnitSize = unitSize / 2f;
         Vector3 halfUnitSizeVec = Vector3.one * halfUnitSize * .99f;
         for (float i = halfUnitSize; i < size.x; i+=unitSize)
         {
@@ -118,7 +118,7 @@ public class SceneManager : Singleton<SceneManager>
     private int WorldToGrid(Vector3 worldPos)
     {
         worldPos -= offset;
-        return Mathf.FloorToInt(worldPos.x) + size.x * (Mathf.FloorToInt(worldPos.y) + size.y * Mathf.FloorToInt(worldPos.z)); // Tried to divide by unit size, didnt work
+        return Mathf.FloorToInt(worldPos.x / unitSize) + Mathf.RoundToInt(size.x / unitSize) * (Mathf.FloorToInt(worldPos.y / unitSize) + Mathf.RoundToInt(size.y / unitSize) * Mathf.FloorToInt(worldPos.z / unitSize)); // Tried to divide by unit size, didnt work
     }
 
     private void OnDrawGizmos()

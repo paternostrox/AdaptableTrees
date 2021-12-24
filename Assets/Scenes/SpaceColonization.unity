@@ -361,12 +361,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: {x: 70, y: 20, z: 70}
-  bottomCenter: {x: 0, y: 0, z: -8}
-  unitSize: 1
+  bottomCenter: {x: 0, y: 0, z: -5}
+  unitSize: 0.5
   showOccupied: 1
   showFree: 0
   showLastCrown: 1
-  treeHeight: 10
+  treeHeight: 3
   treeSize: 2
   treePrefab: {fileID: 5516781350576675562, guid: c59d32cc75c5db849bdc18982cab5185, type: 3}
   nodeKillDistance: 0.2
