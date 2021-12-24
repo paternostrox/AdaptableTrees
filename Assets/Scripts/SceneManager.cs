@@ -46,7 +46,8 @@ public class SceneManager : Singleton<SceneManager>
     private void ProcessLevel()
     {
         float halfUnitSize = unitSize / 2f;
-        Vector3 halfUnitSizeVec = Vector3.one * halfUnitSize * .99f;
+        Vector3 halfUnitSizeVec = Vector3.one * halfUnitSize;
+        //Vector3 halfUnitSizeVec = Vector3.one * halfUnitSize * .99f;
         for (float i = halfUnitSize; i < size.x; i+=unitSize)
         {
             for (float j = halfUnitSize; j < size.y; j += unitSize)
@@ -87,7 +88,7 @@ public class SceneManager : Singleton<SceneManager>
         Vector3 crownPos = fixedPos + Vector3.up * treeHeight;
         Unit[] crownUnits = GetFreeUnits(crownPos, Vector3.one * treeSize);
         Tree tree = Instantiate(treePrefab, transform).GetComponent<Tree>();
-        tree.SetParams(nodeKillDistance, nodeAttractionDistance, nodeSegmentLength, attractorsAmount, unitSize / 2);
+        tree.SetParams(nodeKillDistance, nodeAttractionDistance, nodeSegmentLength, attractorsAmount, unitSize / 2f);
         tree.Init(fixedPos, crownUnits);
         lastCrown = crownUnits;
     }

@@ -362,7 +362,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   size: {x: 70, y: 20, z: 70}
   bottomCenter: {x: 0, y: 0, z: -5}
-  unitSize: 0.5
+  unitSize: 2
   showOccupied: 1
   showFree: 0
   showLastCrown: 1

@@ -20,7 +20,7 @@ public class Tree : MonoBehaviour
         // Add root node
         nodes.Add(new Node(null, rootPos));
 
-        int amountPerUnit = attractorsAmount / crownUnits.Length;
+        int amountPerUnit = Mathf.CeilToInt(((float) attractorsAmount) / crownUnits.Length);
 
         foreach(Unit unit in crownUnits)
         {
@@ -30,7 +30,7 @@ public class Tree : MonoBehaviour
                     Random.Range(-unitHalfSize, unitHalfSize), Random.Range(-unitHalfSize, unitHalfSize));
                 Attractor attractor = new Attractor(attractorPos);
                 attractors.Add(attractor);
-                Instantiate(new GameObject("Attractor"), attractorPos, Quaternion.identity, transform);
+                //Instantiate(new GameObject("Attractor"), attractorPos, Quaternion.identity, transform);
             }
         }
     }
