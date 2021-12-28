@@ -38,10 +38,10 @@ public class Node
     public Node GetNextNode(float segmentLength)
     {
         Vector3 nextPosition = position + GetAverageDirection() * segmentLength;
-        if(nextPosition.y > SceneManager.Instance.treeHeight + SceneManager.Instance.treeSize)
-        {
-            Debug.Log("Shootout! Pos is: " + nextPosition);
-        }
+        //if(nextPosition.y > SceneManager.Instance.treeHeight + SceneManager.Instance.treeSize)
+        //{
+        //    Debug.Log("Shootout! Pos is: " + nextPosition);
+        //}
 
         return new Node(this, nextPosition);
     }

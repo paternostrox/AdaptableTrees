@@ -54,6 +54,10 @@ public class Tree : MonoBehaviour
     {
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
+        builderBasis = new GameObject();
+
+        AddTube(Vector3.zero, Vector3.one * 2);
+        AddTube(Vector3.one * 2, Vector3.one * 5);
     }
 
     private void Update()
@@ -117,8 +121,8 @@ public class Tree : MonoBehaviour
         return minDistNode;
     }
 
-    int pointAmount = 3;
-    float tubeRadius = 0.05f;
+    int pointAmount = 5;
+    float tubeRadius = .5f;
 
     public void AddTube(Vector3 start, Vector3 end)
     {
@@ -127,17 +131,20 @@ public class Tree : MonoBehaviour
         int verticesAmount = mesh.vertices.Length;
         int trianglesAmount = mesh.triangles.Length;
 
+        print(verticesAmount);
+        print(trianglesAmount);
+
         // Create arrays to accomodate old geometry + new tube
         Vector3[] vertices = new Vector3[verticesAmount + pointAmount * 4];
+        Vector2[] uv = new Vector2[verticesAmount + pointAmount * 4];
         int[] triangles = new int[trianglesAmount + pointAmount * 6];
         Vector3[] normals = new Vector3[verticesAmount + pointAmount * 4];
-        Vector2[] uv = new Vector2[verticesAmount + pointAmount * 4];
 
         // Copy old geometry to arrays
         mesh.vertices.CopyTo(vertices, 0);
+        mesh.uv.CopyTo(uv, 0);
         mesh.triangles.CopyTo(triangles, 0);
         mesh.normals.CopyTo(normals, 0);
-        mesh.uv.CopyTo(uv, 0);
 
         // Creates new tube and adds it to arrays
         Vector3[] bottomRing = GetRing(start, end - start, tubeRadius);
@@ -146,16 +153,29 @@ public class Tree : MonoBehaviour
         for (int leftEdge=0; leftEdge<pointAmount; leftEdge++)
         {
             int rightEdge = (leftEdge + 1) % pointAmount;
-            vertices[verticesAmount] = bottomRing[leftEdge];
-            vertices[verticesAmount + 1] = topRing[leftEdge];
-            vertices[verticesAmount + 2] = topRing[rightEdge];
-            vertices[verticesAmount + 3] = bottomRing[rightEdge];
+            Vector3[] verts = { bottomRing[leftEdge], topRing[leftEdge], topRing[rightEdge], bottomRing[rightEdge] };
+            Vector2[] uvs = { Vector2.zero, Vector2.up, Vector2.one, Vector2.right };
+            int[] tris = { verticesAmount, verticesAmount+1, verticesAmount+3, 
+                verticesAmount+1, verticesAmount+2, verticesAmount+3 };
+            Vector3 v1 = bottomRing[rightEdge] - bottomRing[leftEdge];
+            Vector3 v2 = topRing[leftEdge] - bottomRing[leftEdge];
+            Vector3 faceNormal = Vector3.Cross(v1,v2);
+            Vector3[] norms = { faceNormal, faceNormal, faceNormal, faceNormal };
 
-            triangles[].
-
+            verts.CopyTo(vertices, verticesAmount);
+            uvs.CopyTo(uv, verticesAmount);
+            tris.CopyTo(triangles, trianglesAmount);
+            norms.CopyTo(normals, verticesAmount);
 
             verticesAmount += 4;
+            trianglesAmount += 6;
         }
+
+        newMesh.vertices = vertices;
+        newMesh.uv = uv;
+        newMesh.triangles = triangles;
+        newMesh.normals = normals;
+        meshFilter.mesh = newMesh;
     }
 
     GameObject builderBasis;
@@ -170,7 +190,8 @@ public class Tree : MonoBehaviour
         for(int i=0;i<pointAmount;i++)
         {
             float angle = i * angleInc % 360f;
-            Vector3 vertexPos = pos + builderBasis.transform.TransformPoint(new Vector3(Mathf.Cos(angle),0f,Mathf.Sin(angle)));
+            Vector3 vertexPos = pos + builderBasis.transform.TransformPoint(
+                new Vector3(Mathf.Cos(angle*Mathf.Deg2Rad),0f,Mathf.Sin(angle*Mathf.Deg2Rad)))*radius;
             ring[i] = vertexPos;
         }
         return ring;
