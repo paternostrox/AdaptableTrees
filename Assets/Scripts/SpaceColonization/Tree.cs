@@ -124,26 +124,37 @@ public class Tree : MonoBehaviour
     {
         Mesh mesh = meshFilter.mesh;
         Mesh newMesh = new Mesh();
+        int verticesAmount = mesh.vertices.Length;
+        int trianglesAmount = mesh.triangles.Length;
 
-        Vector3[] verts = new Vector3[pointAmount * 4];
-        int[] tris = new int[pointAmount * 6];
-        Vector3[] normals = new Vector3[pointAmount * 4];
-        Vector2[] uvs = new Vector2[pointAmount * 4];
+        // Create arrays to accomodate old geometry + new tube
+        Vector3[] vertices = new Vector3[verticesAmount + pointAmount * 4];
+        int[] triangles = new int[trianglesAmount + pointAmount * 6];
+        Vector3[] normals = new Vector3[verticesAmount + pointAmount * 4];
+        Vector2[] uv = new Vector2[verticesAmount + pointAmount * 4];
 
+        // Copy old geometry to arrays
+        mesh.vertices.CopyTo(vertices, 0);
+        mesh.triangles.CopyTo(triangles, 0);
+        mesh.normals.CopyTo(normals, 0);
+        mesh.uv.CopyTo(uv, 0);
+
+        // Creates new tube and adds it to arrays
         Vector3[] bottomRing = GetRing(start, end - start, tubeRadius);
         Vector3[] topRing = GetRing(end, end - start, tubeRadius);
 
-        // makes the squares
         for (int leftEdge=0; leftEdge<pointAmount; leftEdge++)
         {
             int rightEdge = (leftEdge + 1) % pointAmount;
-            int refVert = 4 * leftEdge;
-            verts[refVert] = bottomRing[leftEdge];
-            verts[refVert + 1] = topRing[leftEdge];
-            verts[refVert + 2] = topRing[rightEdge];
-            verts[refVert + 3] = bottomRing[rightEdge];
+            vertices[verticesAmount] = bottomRing[leftEdge];
+            vertices[verticesAmount + 1] = topRing[leftEdge];
+            vertices[verticesAmount + 2] = topRing[rightEdge];
+            vertices[verticesAmount + 3] = bottomRing[rightEdge];
 
-            tris[].
+            triangles[].
+
+
+            verticesAmount += 4;
         }
     }
 
