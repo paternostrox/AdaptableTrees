@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(MeshFilter))]
+[RequireComponent(typeof(MeshRenderer))]
 public class Tree : MonoBehaviour
 {
     public float killDistance;
@@ -11,6 +13,9 @@ public class Tree : MonoBehaviour
 
     List<Attractor> attractors = new List<Attractor>();
     List<Node> nodes = new List<Node>();
+
+    MeshFilter meshFilter;
+    MeshRenderer meshRenderer;
 
     public void Init(Vector3 rootPos, Unit[] crownUnits)
     {
@@ -43,6 +48,12 @@ public class Tree : MonoBehaviour
 
         this.attractorsAmount = attractorsAmount;
         this.unitHalfSize = unitHalfSize;
+    }
+
+    private void Start()
+    {
+        meshFilter = GetComponent<MeshFilter>();
+        meshRenderer = GetComponent<MeshRenderer>();
     }
 
     private void Update()
@@ -104,5 +115,53 @@ public class Tree : MonoBehaviour
             }
         }
         return minDistNode;
+    }
+
+    int pointAmount = 3;
+    float tubeRadius = 0.05f;
+
+    public void AddTube(Vector3 start, Vector3 end)
+    {
+        Mesh mesh = meshFilter.mesh;
+        Mesh newMesh = new Mesh();
+
+        Vector3[] verts = new Vector3[pointAmount * 4];
+        int[] tris = new int[pointAmount * 6];
+        Vector3[] normals = new Vector3[pointAmount * 4];
+        Vector2[] uvs = new Vector2[pointAmount * 4];
+
+        Vector3[] bottomRing = GetRing(start, end - start, tubeRadius);
+        Vector3[] topRing = GetRing(end, end - start, tubeRadius);
+
+        // makes the squares
+        for (int leftEdge=0; leftEdge<pointAmount; leftEdge++)
+        {
+            int rightEdge = (leftEdge + 1) % pointAmount;
+            int refVert = 4 * leftEdge;
+            verts[refVert] = bottomRing[leftEdge];
+            verts[refVert + 1] = topRing[leftEdge];
+            verts[refVert + 2] = topRing[rightEdge];
+            verts[refVert + 3] = bottomRing[rightEdge];
+
+            tris[].
+        }
+    }
+
+    GameObject builderBasis;
+
+    public Vector3[] GetRing(Vector3 pos, Vector3 localUp, float radius)
+    {
+        //builderBasis.transform.position = pos1;
+        builderBasis.transform.rotation = Quaternion.FromToRotation(Vector3.up, localUp);
+
+        float angleInc = 360f / pointAmount;
+        Vector3[] ring = new Vector3[pointAmount];
+        for(int i=0;i<pointAmount;i++)
+        {
+            float angle = i * angleInc % 360f;
+            Vector3 vertexPos = pos + builderBasis.transform.TransformPoint(new Vector3(Mathf.Cos(angle),0f,Mathf.Sin(angle)));
+            ring[i] = vertexPos;
+        }
+        return ring;
     }
 }
