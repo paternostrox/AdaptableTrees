@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public class Tree : MonoBehaviour
 {
+    bool built = false;
+
     public float killDistance;
     public float attractionDistance;
     public float segmentLength;
@@ -62,40 +64,44 @@ public class Tree : MonoBehaviour
 
     private void Update()
     {
-        foreach (Attractor a in attractors)
+        if (!built)
         {
-            Node closestNode = GetClosestNode(a);
-            if (closestNode != null)
+            foreach (Attractor a in attractors)
             {
-                a.influencedNode = closestNode;
-                closestNode.influencingAttractors.Add(a);
+                Node closestNode = GetClosestNode(a);
+                if (closestNode != null)
+                {
+                    a.influencedNode = closestNode;
+                    closestNode.influencingAttractors.Add(a);
+                }
             }
-        }
 
-        for(int i=0; i<nodes.Count; i++)
-        {
-            Node node = nodes[i];
-            if (node.influencingAttractors.Count > 0)
+            for (int i = 0; i < nodes.Count; i++)
             {
-                Node nextNode = node.GetNextNode(segmentLength);
-                nodes.Add(nextNode);
+                Node node = nodes[i];
+                if (node.influencingAttractors.Count > 0)
+                {
+                    Node nextNode = node.GetNextNode(segmentLength);
+                    nodes.Add(nextNode);
+                    AddTube(node.position, nextNode.position);
+                }
+                //if(node.parent != null)
+                //    Debug.DrawLine(node.position, node.parent.position);
+                node.influencingAttractors.Clear();
             }
-            if(node.parent != null)
-                Debug.DrawLine(node.position, node.parent.position);
-            node.influencingAttractors.Clear();
-        }
 
-        for(int i = attractors.Count - 1; i >= 0; i--)
-        {
-            if(attractors[i].reached)
+            for (int i = attractors.Count - 1; i >= 0; i--)
             {
-                attractors.RemoveAt(i);
+                if (attractors[i].reached)
+                {
+                    attractors.RemoveAt(i);
+                }
             }
-        }
 
-        if(attractors.Count == 0)
-        {
-            // BUILT
+            if (attractors.Count == 0)
+            {
+                built = true;
+            }
         }
     }
 
@@ -121,8 +127,16 @@ public class Tree : MonoBehaviour
         return minDistNode;
     }
 
+    public void BuildTree()
+    {
+        foreach(Node n in nodes)
+        {
+            AddTube(n.position, n.parent.position);
+        }
+    }
+
     int pointAmount = 5;
-    float tubeRadius = .5f;
+    float tubeRadius = .05f;
 
     public void AddTube(Vector3 start, Vector3 end)
     {
