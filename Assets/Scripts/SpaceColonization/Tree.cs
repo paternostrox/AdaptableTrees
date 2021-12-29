@@ -37,7 +37,6 @@ public class Tree : MonoBehaviour
                     Random.Range(-unitHalfSize, unitHalfSize), Random.Range(-unitHalfSize, unitHalfSize));
                 Attractor attractor = new Attractor(attractorPos);
                 attractors.Add(attractor);
-                //Instantiate(new GameObject("Attractor"), attractorPos, Quaternion.identity, transform);
             }
         }
     }
@@ -57,6 +56,8 @@ public class Tree : MonoBehaviour
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
         builderBasis = new GameObject();
+        builderBasis.transform.parent = transform;
+        builderBasis.transform.localPosition = Vector3.zero;
 
         AddTube(Vector3.zero, Vector3.one * 2);
         AddTube(Vector3.one * 2, Vector3.one * 5);
@@ -196,7 +197,7 @@ public class Tree : MonoBehaviour
 
     public Vector3[] GetRing(Vector3 pos, Vector3 localUp, float radius)
     {
-        //builderBasis.transform.position = pos1;
+        builderBasis.transform.position = pos;
         builderBasis.transform.rotation = Quaternion.FromToRotation(Vector3.up, localUp);
 
         float angleInc = 360f / pointAmount;
@@ -204,7 +205,7 @@ public class Tree : MonoBehaviour
         for(int i=0;i<pointAmount;i++)
         {
             float angle = i * angleInc % 360f;
-            Vector3 vertexPos = pos + builderBasis.transform.TransformPoint(
+            Vector3 vertexPos = builderBasis.transform.localPosition + builderBasis.transform.TransformPoint(
                 new Vector3(Mathf.Cos(angle*Mathf.Deg2Rad),0f,Mathf.Sin(angle*Mathf.Deg2Rad)))*radius;
             ring[i] = vertexPos;
         }
