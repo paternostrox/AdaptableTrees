@@ -19,10 +19,14 @@ public class Tree : MonoBehaviour
     MeshFilter meshFilter;
     MeshRenderer meshRenderer;
 
+    new Transform transform;
+
+    float buildTime;
+
     public void Init(Vector3 rootPos, Unit[] crownUnits)
     {
         // Position tree at node
-        transform.position = rootPos;
+        gameObject.transform.position = rootPos;
 
         // Add root node
         nodes.Add(new Node(null, rootPos));
@@ -55,9 +59,12 @@ public class Tree : MonoBehaviour
     {
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
-        builderBasis = new GameObject();
+        transform = gameObject.transform;
+        builderBasis = new GameObject("Builder");
         builderBasis.transform.parent = transform;
-        builderBasis.transform.localPosition = Vector3.zero;
+        //builderBasis.transform.localPosition = Vector3.zero;
+
+        buildTime = Time.time;
 
         AddTube(Vector3.zero, Vector3.one * 2);
         AddTube(Vector3.one * 2, Vector3.one * 5);
@@ -102,6 +109,7 @@ public class Tree : MonoBehaviour
             if (attractors.Count == 0)
             {
                 built = true;
+                print("Build time is: " + (Time.time - buildTime) + "seconds.");
             }
         }
     }
@@ -145,9 +153,6 @@ public class Tree : MonoBehaviour
         Mesh newMesh = new Mesh();
         int verticesAmount = mesh.vertices.Length;
         int trianglesAmount = mesh.triangles.Length;
-
-        print(verticesAmount);
-        print(trianglesAmount);
 
         // Create arrays to accomodate old geometry + new tube
         Vector3[] vertices = new Vector3[verticesAmount + pointAmount * 4];
@@ -197,7 +202,7 @@ public class Tree : MonoBehaviour
 
     public Vector3[] GetRing(Vector3 pos, Vector3 localUp, float radius)
     {
-        builderBasis.transform.position = pos;
+        //builderBasis.transform.position = pos;
         builderBasis.transform.rotation = Quaternion.FromToRotation(Vector3.up, localUp);
 
         float angleInc = 360f / pointAmount;
@@ -205,7 +210,7 @@ public class Tree : MonoBehaviour
         for(int i=0;i<pointAmount;i++)
         {
             float angle = i * angleInc % 360f;
-            Vector3 vertexPos = builderBasis.transform.localPosition + builderBasis.transform.TransformPoint(
+            Vector3 vertexPos = transform.InverseTransformPoint(pos) + builderBasis.transform.TransformDirection(
                 new Vector3(Mathf.Cos(angle*Mathf.Deg2Rad),0f,Mathf.Sin(angle*Mathf.Deg2Rad)))*radius;
             ring[i] = vertexPos;
         }

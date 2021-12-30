@@ -46,8 +46,8 @@ public class SceneManager : Singleton<SceneManager>
     private void ProcessLevel()
     {
         float halfUnitSize = unitSize / 2f;
-        Vector3 halfUnitSizeVec = Vector3.one * halfUnitSize;
-        //Vector3 halfUnitSizeVec = Vector3.one * halfUnitSize * .99f;
+        //Vector3 halfUnitSizeVec = Vector3.one * halfUnitSize;
+        Vector3 halfUnitSizeVec = Vector3.one * halfUnitSize * .99f;
         for (float i = halfUnitSize; i < size.x; i+=unitSize)
         {
             for (float j = halfUnitSize; j < size.y; j += unitSize)
