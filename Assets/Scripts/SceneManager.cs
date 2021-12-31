@@ -23,7 +23,7 @@ public class SceneManager : Singleton<SceneManager>
 
     public float treeHeight = 10f;
     public float treeSize = 2f;
-    public float treeTubeRadius = .05f;
+    public float treeThickness = .05f;
     public int treeTubePointAmount = 5;
     public GameObject treePrefab;
 
@@ -86,11 +86,18 @@ public class SceneManager : Singleton<SceneManager>
 
     private void TryGenerateTree(Vector3 position)
     {
-        Vector3 fixedPos = units[WorldToGrid(position)].position;
+        Unit rootUnit = units[WorldToGrid(position)];
+        if (rootUnit.isOccupied)
+        {
+            Debug.Log("Cannot place tree roots on obstacles!");
+            return;
+        }
+        Vector3 fixedPos = rootUnit.position;
         Vector3 crownPos = fixedPos + Vector3.up * treeHeight;
+        fixedPos += Vector3.down * unitSize / 2f;
         Unit[] crownUnits = GetFreeUnits(crownPos, Vector3.one * treeSize);
         Tree tree = Instantiate(treePrefab, transform).GetComponent<Tree>();
-        tree.SetParams(nodeKillDistance, nodeAttractionDistance, nodeSegmentLength, attractorsAmount, unitSize / 2f, treeTubeRadius, treeTubePointAmount);
+        tree.SetParams(nodeKillDistance, nodeAttractionDistance, nodeSegmentLength, attractorsAmount, unitSize / 2f, treeThickness, treeTubePointAmount);
         tree.Init(fixedPos, crownUnits);
         lastCrown = crownUnits;
     }

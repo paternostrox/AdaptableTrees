@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
@@ -24,7 +25,7 @@ public class Tree : MonoBehaviour
 
     new Transform transform;
 
-    float buildTime;
+    float timer;
 
     public void Init(Vector3 rootPos, Unit[] crownUnits)
     {
@@ -69,12 +70,15 @@ public class Tree : MonoBehaviour
         builderBasis.transform.parent = transform;
         //builderBasis.transform.localPosition = Vector3.zero;
 
-        buildTime = Time.time;
+        BuildTree();
+        StartCoroutine(RenderTree());
+
     }
 
-    private void Update()
+    public void BuildTree()
     {
-        if (!built)
+        timer = Time.time;
+        while (attractors.Count > 0)
         {
             foreach (Attractor a in attractors)
             {
@@ -93,7 +97,7 @@ public class Tree : MonoBehaviour
                 {
                     Node nextNode = node.GetNextNode(segmentLength);
                     nodes.Add(nextNode);
-                    AddTube(nextNode, node);
+                    node.isTip = false;
                 }
                 //if(node.parent != null)
                 //    Debug.DrawLine(node.position, node.parent.position);
@@ -107,30 +111,39 @@ public class Tree : MonoBehaviour
                     attractors.RemoveAt(i);
                 }
             }
-
-            if (attractors.Count == 0)
-            {
-                built = true;
-                print("Build time is: " + (Time.time - buildTime) + "seconds.");
-            }
         }
-    }
 
-    public void BuildTree()
-    {
-
-    }
-
-    public void RenderTree()
-    {
+        // THICKNESS
         for (int i = 0; i < nodes.Count; i++)
         {
             Node node = nodes[i];
             if (node.isTip)
             {
-
+                // When there are multiple child nodes, use the thickest
+                while (node.parent != null)
+                {
+                    if (node.parent.thickness < node.thickness + .7f)
+                    {
+                        node.parent.thickness += .3f;
+                    }
+                    node = node.parent;
+                }
             }
         }
+
+        Debug.Log("Build time is: " + (Time.time - timer) + "seconds.");
+    }
+
+    public IEnumerator RenderTree()
+    {
+        timer = Time.time;
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            Node node = nodes[i];
+            AddTube(node, node.parent);
+            yield return null;
+        }
+        Debug.Log("Render time is: " + (Time.time - timer) + "seconds.");
     }
 
     public Node GetClosestNode(Attractor attractor)
@@ -155,8 +168,11 @@ public class Tree : MonoBehaviour
         return minDistNode;
     }
 
-    public void AddTube(Node node, Node parent = null)
+    public void AddTube(Node node, Node parent)
     {
+        if (parent == null)
+            return;
+
         Mesh mesh = meshFilter.mesh;
         Mesh newMesh = new Mesh();
         int verticesAmount = mesh.vertices.Length;
@@ -175,8 +191,8 @@ public class Tree : MonoBehaviour
         mesh.normals.CopyTo(normals, 0);
 
         // Creates new tube and adds it to arrays
-        Vector3[] bottomRing = GetRing(parent.position, parent.directionFromParent, tubeRadius);
-        Vector3[] topRing = GetRing(node.position, node.directionFromParent, tubeRadius);
+        Vector3[] bottomRing = GetRing(parent.position, parent.directionFromParent, tubeRadius*parent.thickness);
+        Vector3[] topRing = GetRing(node.position, node.directionFromParent, tubeRadius*node.thickness);
 
         for (int leftEdge=0; leftEdge<pointAmount; leftEdge++)
         {

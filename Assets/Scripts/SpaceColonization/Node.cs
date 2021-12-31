@@ -11,6 +11,7 @@ public class Node
     public Vector3 directionFromParent = Vector3.up;
     public List<Attractor> influencingAttractors = new List<Attractor>();
     public bool isTip = true; // For thickening
+    public float thickness = 1f;
 
     float jitterAmount;
 
