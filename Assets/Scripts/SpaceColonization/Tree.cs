@@ -13,6 +13,9 @@ public class Tree : MonoBehaviour
     public float unitHalfSize;
     public int attractorsAmount;
 
+    int pointAmount;
+    float tubeRadius;
+
     List<Attractor> attractors = new List<Attractor>();
     List<Node> nodes = new List<Node>();
 
@@ -45,7 +48,7 @@ public class Tree : MonoBehaviour
         }
     }
 
-    public void SetParams(float killDistance, float attractionDistance, float segmentLength, int attractorsAmount, float unitHalfSize)
+    public void SetParams(float killDistance, float attractionDistance, float segmentLength, int attractorsAmount, float unitHalfSize, float tubeRadius, int pointAmount)
     {
         this.killDistance = killDistance;
         this.attractionDistance = attractionDistance;
@@ -53,6 +56,8 @@ public class Tree : MonoBehaviour
 
         this.attractorsAmount = attractorsAmount;
         this.unitHalfSize = unitHalfSize;
+        this.tubeRadius = tubeRadius;
+        this.pointAmount = pointAmount;
     }
 
     private void Start()
@@ -65,9 +70,6 @@ public class Tree : MonoBehaviour
         //builderBasis.transform.localPosition = Vector3.zero;
 
         buildTime = Time.time;
-
-        AddTube(Vector3.zero, Vector3.one * 2);
-        AddTube(Vector3.one * 2, Vector3.one * 5);
     }
 
     private void Update()
@@ -91,7 +93,7 @@ public class Tree : MonoBehaviour
                 {
                     Node nextNode = node.GetNextNode(segmentLength);
                     nodes.Add(nextNode);
-                    AddTube(node.position, nextNode.position);
+                    AddTube(nextNode, node);
                 }
                 //if(node.parent != null)
                 //    Debug.DrawLine(node.position, node.parent.position);
@@ -110,6 +112,23 @@ public class Tree : MonoBehaviour
             {
                 built = true;
                 print("Build time is: " + (Time.time - buildTime) + "seconds.");
+            }
+        }
+    }
+
+    public void BuildTree()
+    {
+
+    }
+
+    public void RenderTree()
+    {
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            Node node = nodes[i];
+            if (node.isTip)
+            {
+
             }
         }
     }
@@ -136,18 +155,7 @@ public class Tree : MonoBehaviour
         return minDistNode;
     }
 
-    public void BuildTree()
-    {
-        foreach(Node n in nodes)
-        {
-            AddTube(n.position, n.parent.position);
-        }
-    }
-
-    int pointAmount = 5;
-    float tubeRadius = .05f;
-
-    public void AddTube(Vector3 start, Vector3 end)
+    public void AddTube(Node node, Node parent = null)
     {
         Mesh mesh = meshFilter.mesh;
         Mesh newMesh = new Mesh();
@@ -167,8 +175,8 @@ public class Tree : MonoBehaviour
         mesh.normals.CopyTo(normals, 0);
 
         // Creates new tube and adds it to arrays
-        Vector3[] bottomRing = GetRing(start, end - start, tubeRadius);
-        Vector3[] topRing = GetRing(end, end - start, tubeRadius);
+        Vector3[] bottomRing = GetRing(parent.position, parent.directionFromParent, tubeRadius);
+        Vector3[] topRing = GetRing(node.position, node.directionFromParent, tubeRadius);
 
         for (int leftEdge=0; leftEdge<pointAmount; leftEdge++)
         {

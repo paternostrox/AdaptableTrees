@@ -23,6 +23,8 @@ public class SceneManager : Singleton<SceneManager>
 
     public float treeHeight = 10f;
     public float treeSize = 2f;
+    public float treeTubeRadius = .05f;
+    public int treeTubePointAmount = 5;
     public GameObject treePrefab;
 
     public float nodeKillDistance = .2f;
@@ -88,7 +90,7 @@ public class SceneManager : Singleton<SceneManager>
         Vector3 crownPos = fixedPos + Vector3.up * treeHeight;
         Unit[] crownUnits = GetFreeUnits(crownPos, Vector3.one * treeSize);
         Tree tree = Instantiate(treePrefab, transform).GetComponent<Tree>();
-        tree.SetParams(nodeKillDistance, nodeAttractionDistance, nodeSegmentLength, attractorsAmount, unitSize / 2f);
+        tree.SetParams(nodeKillDistance, nodeAttractionDistance, nodeSegmentLength, attractorsAmount, unitSize / 2f, treeTubeRadius, treeTubePointAmount);
         tree.Init(fixedPos, crownUnits);
         lastCrown = crownUnits;
     }

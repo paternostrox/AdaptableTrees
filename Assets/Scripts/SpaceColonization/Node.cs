@@ -8,14 +8,18 @@ public class Node
 {
     public Node parent;
     public Vector3 position;
+    public Vector3 directionFromParent = Vector3.up;
     public List<Attractor> influencingAttractors = new List<Attractor>();
+    public bool isTip = true; // For thickening
+
     float jitterAmount;
-    bool isTip; // For later use with thickening (maybe)
 
     public Node(Node parent, Vector3 position)
     {
         this.parent = parent;
         this.position = position;
+        if (parent != null)
+            directionFromParent = position - parent.position;
         jitterAmount = SceneManager.Instance.nodeJitterAmount;
     }
 

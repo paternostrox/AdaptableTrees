@@ -368,12 +368,14 @@ MonoBehaviour:
   showLastCrown: 1
   treeHeight: 3
   treeSize: 2
+  treeTubeRadius: 0.03
+  treeTubePointAmount: 5
   treePrefab: {fileID: 5516781350576675562, guid: c59d32cc75c5db849bdc18982cab5185, type: 3}
-  nodeKillDistance: 0.2
-  nodeAttractionDistance: 10
-  nodeSegmentLength: 0.1
-  nodeJitterAmount: 0.01
-  attractorsAmount: 300
+  nodeKillDistance: 0.4
+  nodeAttractionDistance: 3
+  nodeSegmentLength: 0.3
+  nodeJitterAmount: 0.001
+  attractorsAmount: 500
 --- !u!1001 &67319624
 PrefabInstance:
   m_ObjectHideFlags: 0
