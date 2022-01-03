@@ -22,7 +22,7 @@ public class SceneManager : Singleton<SceneManager>
     public Unit[] lastCrown;
 
     public float treeHeight = 10f;
-    public float treeSize = 2f;
+    public Vector3 treeHalfExtents = Vector3.one;
     public float treeThickness = .05f;
     public int treeTubePointAmount = 5;
     public GameObject treePrefab;
@@ -57,8 +57,8 @@ public class SceneManager : Singleton<SceneManager>
                 for (float k = halfUnitSize; k < size.z; k += unitSize)
                 {
                     Vector3 pos = new Vector3(i, j, k) + offset;
-                    Collider[] cols = Physics.OverlapBox(pos, halfUnitSizeVec);
-                    Unit unit = new Unit(pos, (cols.Length > 0));
+                    bool isOccupied = Physics.CheckBox(pos, halfUnitSizeVec);
+                    Unit unit = new Unit(pos, isOccupied);
                     units[WorldToGrid(pos)] = unit;
                 }
             }
@@ -92,10 +92,11 @@ public class SceneManager : Singleton<SceneManager>
             Debug.Log("Cannot place tree roots on obstacles!");
             return;
         }
-        Vector3 fixedPos = rootUnit.position;
+        float halfUnitSize = unitSize / 2f;
+        Vector3 fixedPos = rootUnit.position + halfUnitSize * Vector3.one;
         Vector3 crownPos = fixedPos + Vector3.up * treeHeight;
-        fixedPos += Vector3.down * unitSize / 2f;
-        Unit[] crownUnits = GetFreeUnits(crownPos, Vector3.one * treeSize);
+        fixedPos += Vector3.down * halfUnitSize;
+        Unit[] crownUnits = GetFreeUnits(crownPos, treeHalfExtents);
         Tree tree = Instantiate(treePrefab, transform).GetComponent<Tree>();
         tree.SetParams(nodeKillDistance, nodeAttractionDistance, nodeSegmentLength, attractorsAmount, unitSize / 2f, treeThickness, treeTubePointAmount);
         tree.Init(fixedPos, crownUnits);
