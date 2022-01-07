@@ -13,7 +13,8 @@ public class Node
     public bool isTip = true; // For thickening
     public float thickness = 1f;
 
-    float jitterAmount;
+    // jitter to avoid getting stuck
+    static float jitterAmount = .01f;
 
     public Node(Node parent, Vector3 position)
     {
@@ -21,7 +22,6 @@ public class Node
         this.position = position;
         if (parent != null)
             directionFromParent = position - parent.position;
-        jitterAmount = SceneManager.Instance.nodeJitterAmount;
     }
 
     public Vector3 GetAverageDirection()

@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
-public class SceneManager : Singleton<SceneManager>
-{
-    Camera camera;
+#if(UNITY_EDITOR)
 
+[ExecuteInEditMode]
+public class SceneManager : MonoBehaviour
+{
     [SerializeField] Vector3Int size;
     [SerializeField] Vector3 bottomCenter;
     [SerializeField] float unitSize = 1;
@@ -24,29 +26,26 @@ public class SceneManager : Singleton<SceneManager>
     public float treeHeight = 10f;
     public Vector3 treeHalfExtents = Vector3.one;
     public float treeThickness = .05f;
-    public int treeTubePointAmount = 5;
+    public int treeTubeVertexAmount = 5;
     public GameObject treePrefab;
 
     public float nodeKillDistance = .2f;
     public float nodeAttractionDistance = 10f;
     public float nodeSegmentLength = .1f;
-    // jitter to avoid getting stuck
-    public float nodeJitterAmount = .02f;
 
     public int attractorsAmount = 100;
 
-    private void Start()
+    private void Awake()
     {
-        camera = Camera.main;
-        units = new Unit[Mathf.RoundToInt(size.x * size.y * size.z / Mathf.Pow(unitSize,3))];
-        Vector3 halfSize = size / 2;
-        halfSize.y = 0;
-        offset = bottomCenter - halfSize;
         ProcessLevel();
     }
 
-    private void ProcessLevel()
+    public void ProcessLevel()
     {
+        units = new Unit[Mathf.RoundToInt(size.x * size.y * size.z / Mathf.Pow(unitSize, 3))];
+        Vector3 halfSize = size / 2;
+        halfSize.y = 0;
+        offset = bottomCenter - halfSize;
         float halfUnitSize = unitSize / 2f;
         //Vector3 halfUnitSizeVec = Vector3.one * halfUnitSize;
         Vector3 halfUnitSizeVec = Vector3.one * halfUnitSize * .99f;
@@ -63,19 +62,22 @@ public class SceneManager : Singleton<SceneManager>
                 }
             }
         }
-    }
 
-    private void Update()
-    {
-        MouseInteraction();
-    }
-
-    private void MouseInteraction()
-    {
-        if(Input.GetMouseButtonDown(0))
+        Tree[] childTrees = transform.GetComponentsInChildren<Tree>();
+        foreach(Tree t in childTrees)
         {
+            t.getFreeUnits = GetFreeUnits;
+        }
+    }
+
+    public void MouseInteraction()
+    {
+        Event e = Event.current;
+        if (e.type == EventType.MouseDown && e.button == 0)
+        {
+            print("LEFT CLICK IDNTF");
             RaycastHit hit;
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = HandleUtility.GUIPointToWorldRay(e.mousePosition);
             if(Physics.Raycast(ray, out hit))
             {
                 print("HIT at " + hit.point);
@@ -86,24 +88,20 @@ public class SceneManager : Singleton<SceneManager>
 
     private void TryGenerateTree(Vector3 position)
     {
-        Unit rootUnit = units[WorldToGrid(position)];
-        if (rootUnit.isOccupied)
-        {
-            Debug.Log("Cannot place tree roots on obstacles!");
-            return;
-        }
+        //Unit rootUnit = units[WorldToGrid(position)];
+        //if (rootUnit.isOccupied)
+        //{
+        //    Debug.Log("Cannot place tree roots on obstacles!");
+        //    return;
+        //}
         float halfUnitSize = unitSize / 2f;
-        Vector3 fixedPos = rootUnit.position + halfUnitSize * Vector3.one;
-        Vector3 crownPos = fixedPos + Vector3.up * treeHeight;
-        fixedPos += Vector3.down * halfUnitSize;
-        Unit[] crownUnits = GetFreeUnits(crownPos, treeHalfExtents);
         Tree tree = Instantiate(treePrefab, transform).GetComponent<Tree>();
-        tree.SetParams(nodeKillDistance, nodeAttractionDistance, nodeSegmentLength, attractorsAmount, unitSize / 2f, treeThickness, treeTubePointAmount);
-        tree.Init(fixedPos, crownUnits);
-        lastCrown = crownUnits;
+        tree.Init(position, GetFreeUnits, treeHalfExtents, treeHeight, nodeKillDistance, 
+            nodeAttractionDistance, nodeSegmentLength, attractorsAmount, treeThickness, treeTubeVertexAmount, unitSize / 2f);
+        tree.TreeRegen();
     }
 
-    private Unit[] GetFreeUnits(Vector3 position, Vector3 halfExtents)
+    public Unit[] GetFreeUnits(Vector3 position, Vector3 halfExtents)
     {
         List<Unit> freeUnits = new List<Unit>();
 
@@ -129,18 +127,20 @@ public class SceneManager : Singleton<SceneManager>
     private int WorldToGrid(Vector3 worldPos)
     {
         worldPos -= offset;
-        return Mathf.FloorToInt(worldPos.x / unitSize) + Mathf.RoundToInt(size.x / unitSize) * (Mathf.FloorToInt(worldPos.y / unitSize) + Mathf.RoundToInt(size.y / unitSize) * Mathf.FloorToInt(worldPos.z / unitSize)); // Tried to divide by unit size, didnt work
+        return Mathf.FloorToInt(worldPos.x / unitSize) + Mathf.RoundToInt(size.x / unitSize) * (Mathf.FloorToInt(worldPos.y / unitSize) 
+            + Mathf.RoundToInt(size.y / unitSize) * Mathf.FloorToInt(worldPos.z / unitSize));
     }
 
     private void OnDrawGizmos()
     {
-        if (!Application.isPlaying)
-            return;
         Vector3 center = bottomCenter;
         Vector3 unitSizeVec = unitSize * Vector3.one;
         center.y = bottomCenter.y + size.y / 2;
         Gizmos.color = Color.blue;
         Gizmos.DrawWireCube(center, size);
+
+        if (units == null)
+            return;
 
         if (showOccupied || showFree)
         {
@@ -169,3 +169,5 @@ public class SceneManager : Singleton<SceneManager>
         }
     }
 }
+
+#endif
