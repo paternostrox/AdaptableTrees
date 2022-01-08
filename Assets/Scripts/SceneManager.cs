@@ -9,8 +9,8 @@ using UnityEngine;
 public class SceneManager : MonoBehaviour
 {
     [SerializeField] Vector3Int size;
-    [SerializeField] Vector3 bottomCenter;
     [SerializeField] float unitSize = 1;
+    Vector3 halfUnitSizeVec;
     Vector3 offset;
 
     Color freeColor = new Color(0,1,0,.4f);
@@ -18,22 +18,26 @@ public class SceneManager : MonoBehaviour
 
     public bool showOccupied = true;
     public bool showFree = false;
-    public bool showLastCrown = false;
 
     public Unit[] units;
-    public Unit[] lastCrown;
 
     public float treeHeight = 10f;
     public Vector3 treeHalfExtents = Vector3.one;
     public float treeThickness = .05f;
     public int treeTubeVertexAmount = 5;
-    public GameObject treePrefab;
+    public Material treeMaterial;
 
     public float nodeKillDistance = .2f;
     public float nodeAttractionDistance = 10f;
     public float nodeSegmentLength = .1f;
 
     public int attractorsAmount = 100;
+
+    public bool useCustomVolume = false;
+    [HideInInspector]
+    public GameObject treeGenVolume;
+    [HideInInspector]
+    public LayerMask treeGenVolumeMask;
 
     private void Awake()
     {
@@ -45,10 +49,10 @@ public class SceneManager : MonoBehaviour
         units = new Unit[Mathf.RoundToInt(size.x * size.y * size.z / Mathf.Pow(unitSize, 3))];
         Vector3 halfSize = size / 2;
         halfSize.y = 0;
-        offset = bottomCenter - halfSize;
+        offset = transform.position - halfSize;
         float halfUnitSize = unitSize / 2f;
         //Vector3 halfUnitSizeVec = Vector3.one * halfUnitSize;
-        Vector3 halfUnitSizeVec = Vector3.one * halfUnitSize * .99f;
+        halfUnitSizeVec = Vector3.one * halfUnitSize * .99f;
         for (float i = halfUnitSize; i < size.x; i+=unitSize)
         {
             for (float j = halfUnitSize; j < size.y; j += unitSize)
@@ -95,8 +99,10 @@ public class SceneManager : MonoBehaviour
         //    return;
         //}
         float halfUnitSize = unitSize / 2f;
-        Tree tree = Instantiate(treePrefab, transform).GetComponent<Tree>();
-        tree.Init(position, GetFreeUnits, treeHalfExtents, treeHeight, nodeKillDistance, 
+        GameObject go = new GameObject("Tree");
+        go.transform.SetParent(transform);
+        Tree tree = go.AddComponent<Tree>();
+        tree.Init(position, GetFreeUnits, treeMaterial, treeHalfExtents, treeHeight, nodeKillDistance, 
             nodeAttractionDistance, nodeSegmentLength, attractorsAmount, treeThickness, treeTubeVertexAmount, unitSize / 2f);
         tree.TreeRegen();
     }
@@ -104,6 +110,9 @@ public class SceneManager : MonoBehaviour
     public Unit[] GetFreeUnits(Vector3 position, Vector3 halfExtents)
     {
         List<Unit> freeUnits = new List<Unit>();
+
+        if (useCustomVolume)
+            treeGenVolume.transform.position = position;
 
         for(float i =-halfExtents.x; i < halfExtents.x; i += unitSize)
         {
@@ -115,6 +124,13 @@ public class SceneManager : MonoBehaviour
                     Unit unit = units[WorldToGrid(fixedPos)];
                     if(!unit.isOccupied)
                     {
+                        if(useCustomVolume)
+                        {
+                            if(!Physics.CheckBox(fixedPos, halfUnitSizeVec, Quaternion.identity))
+                            {
+                                continue;
+                            }
+                        }
                         freeUnits.Add(unit);
                     }
                 }
@@ -133,9 +149,9 @@ public class SceneManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Vector3 center = bottomCenter;
+        Vector3 center = transform.position;
         Vector3 unitSizeVec = unitSize * Vector3.one;
-        center.y = bottomCenter.y + size.y / 2;
+        center.y += size.y / 2;
         Gizmos.color = Color.blue;
         Gizmos.DrawWireCube(center, size);
 
@@ -156,15 +172,6 @@ public class SceneManager : MonoBehaviour
                     Gizmos.color = freeColor;
                     Gizmos.DrawCube(units[i].position, unitSizeVec);
                 }
-            }
-        }
-
-        if (showLastCrown && lastCrown != null)
-        {
-            for (int i = 0; i < lastCrown.Length; i++)
-            {
-                Gizmos.color = Color.cyan;
-                Gizmos.DrawCube(lastCrown[i].position, unitSizeVec);
             }
         }
     }

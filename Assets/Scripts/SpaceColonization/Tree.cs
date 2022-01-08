@@ -65,7 +65,7 @@ public class Tree : MonoBehaviour
         EditorCoroutineUtility.StartCoroutine(RenderTree(), this);
     }
 
-    public void Init(Vector3 position, Func<Vector3, Vector3, Unit[]> getFreeUnits, 
+    public void Init(Vector3 position, Func<Vector3, Vector3, Unit[]> getFreeUnits, Material material,
         Vector3 halfExtents, float height, float killDistance, float attractionDistance, 
         float segmentLength, int attractorsAmount, float tubeRadius, int tubeVertexAmount, float unitHalfSize)
     {
@@ -78,6 +78,7 @@ public class Tree : MonoBehaviour
         // Attributions
         transform.position = position;
         this.getFreeUnits = getFreeUnits;
+        meshRenderer.material = material;
 
         this.halfExtents = halfExtents;
         this.height = height;
