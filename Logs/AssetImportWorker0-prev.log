@@ -1,0 +1,690 @@
+Using pre-set license
+Built from '2020.3/release' branch; Version is '2020.3.27f1 (e759542391ea) revision 15161684'; Using compiler version '192528614'; Build Type 'Release'
+OS: 'Windows 10  (10.0.19043) 64bit Core' Language: 'en' Physical Memory: 8147 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\2020.3.27f1\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker0
+-projectPath
+C:/Users/Paternostro/Documents/GitHub/AdaptableTrees
+-logFile
+Logs/AssetImportWorker0.log
+-srvPort
+61211
+Successfully changed project path to: C:/Users/Paternostro/Documents/GitHub/AdaptableTrees
+C:/Users/Paternostro/Documents/GitHub/AdaptableTrees
+Using Asset Import Pipeline V2.
+Refreshing native plugins compatible for Editor in 104.29 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2020.3.27f1 (e759542391ea)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2020.3.27f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/Paternostro/Documents/GitHub/AdaptableTrees/Assets
+GfxDevice: creating device client; threaded=0
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce GTX 1050 Ti (ID=0x1c82)
+    Vendor:   
+    VRAM:     4018 MB
+    Driver:   27.21.14.5751
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2020.3.27f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2020.3.27f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/2020.3.27f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56948
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.3.27f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.043701 seconds.
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 49.28 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.287 seconds
+Domain Reload Profiling:
+	ReloadAssembly (1288ms)
+		BeginReloadAssembly (508ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (0ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (1ms)
+		EndReloadAssembly (639ms)
+			LoadAssemblies (505ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (197ms)
+			ReleaseScriptCaches (0ms)
+			RebuildScriptCaches (51ms)
+			SetupLoadedEditorAssemblies (249ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (6ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (49ms)
+				BeforeProcessingInitializeOnLoad (34ms)
+				ProcessInitializeOnLoadAttributes (120ms)
+				ProcessInitializeOnLoadMethodAttributes (39ms)
+				AfterProcessingInitializeOnLoad (0ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (0ms)
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.043951 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 1.76 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  2.002 seconds
+Domain Reload Profiling:
+	ReloadAssembly (2003ms)
+		BeginReloadAssembly (207ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (8ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (23ms)
+		EndReloadAssembly (1711ms)
+			LoadAssemblies (654ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (383ms)
+			ReleaseScriptCaches (0ms)
+			RebuildScriptCaches (74ms)
+			SetupLoadedEditorAssemblies (479ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (7ms)
+				SetLoadedEditorAssemblies (1ms)
+				RefreshPlugins (2ms)
+				BeforeProcessingInitializeOnLoad (115ms)
+				ProcessInitializeOnLoadAttributes (331ms)
+				ProcessInitializeOnLoadMethodAttributes (15ms)
+				AfterProcessingInitializeOnLoad (10ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (10ms)
+Platform modules already initialized, skipping
+========================================================================
+Worker process is ready to serve import requests
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.17 seconds
+Refreshing native plugins compatible for Editor in 0.50 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1673 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 87.1 MB.
+System memory in use after: 87.2 MB.
+
+Unloading 19 unused Assets to reduce memory usage. Loaded Objects now: 2126.
+Total: 3.273500 ms (FindLiveObjects: 0.141200 ms CreateObjectMapping: 0.065800 ms MarkObjects: 2.974400 ms  DeleteObjects: 0.090900 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  path: Assets/Models/cityscene-riomaggiore
+  artifactKey: Guid(9dd33a61d6c11a64fb146c9480c4345f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/cityscene-riomaggiore using Guid(9dd33a61d6c11a64fb146c9480c4345f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7b55bdaa1ebc56b515234ca49a7a3db7') in 0.006648 seconds 
+  Import took 0.010311 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.701438 seconds.
+  path: Assets/Models/cityscene-riomaggiore/source
+  artifactKey: Guid(05733df14e8e6a645931837105fe55de) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/cityscene-riomaggiore/source using Guid(05733df14e8e6a645931837105fe55de) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '21a8e5deaa576543e4ea4299c15e0eec') in 0.003221 seconds 
+  Import took 0.006703 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.647720 seconds.
+  path: Assets/Models/cityscene-riomaggiore/source/Cityscene Riomaggiore.zip
+  artifactKey: Guid(7ad958f6e7594e047a3d1434a39f44b2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/cityscene-riomaggiore/source/Cityscene Riomaggiore.zip using Guid(7ad958f6e7594e047a3d1434a39f44b2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2030e86e3c04c83d527beb6c176a3be6') in 0.048171 seconds 
+  Import took 0.051386 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 93.462515 seconds.
+  path: Assets/Models/Cityscene Riomaggiore
+  artifactKey: Guid(2d4d94da1d361cb46b54ac01d8d19748) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore using Guid(2d4d94da1d361cb46b54ac01d8d19748) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '61c6cf57f7e1a7529190f749e94b7040') in 0.002982 seconds 
+  Import took 0.007008 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.126706 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/Cityscene Riomaggiore.fbx
+  artifactKey: Guid(768b4a5050e06474f99c041cdca63987) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/Cityscene Riomaggiore.fbx using Guid(768b4a5050e06474f99c041cdca63987) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2fcbd561c5cab83a43c8758c8fba6e88') in 2.173363 seconds 
+  Import took 2.178341 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000362 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_OliveTreeBark.jpg
+  artifactKey: Guid(062992797b6005347b5f096e00ca5eaa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_OliveTreeBark.jpg using Guid(062992797b6005347b5f096e00ca5eaa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7b3e58819fc5b52680282c5f57911ae4') in 0.201440 seconds 
+  Import took 0.204495 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000313 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/p_vase_tex_001_Faces.jpg
+  artifactKey: Guid(244d0f54d299a9c4584c13955711e85a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/p_vase_tex_001_Faces.jpg using Guid(244d0f54d299a9c4584c13955711e85a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c320efda5696cece051b5a1eb0bd9aaa') in 0.009345 seconds 
+  Import took 0.015329 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000320 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Opacity_Flowers.jpg
+  artifactKey: Guid(a48d29a86402228439163683642da13f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Opacity_Flowers.jpg using Guid(a48d29a86402228439163683642da13f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '609d7e50642d79558e616f08d839d79b') in 0.008347 seconds 
+  Import took 0.011136 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000293 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_PurpleFlower.jpg
+  artifactKey: Guid(e8a14efc6bf0d52428d12bdbb5b6c859) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_PurpleFlower.jpg using Guid(e8a14efc6bf0d52428d12bdbb5b6c859) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7d46131e134c4c3b2880d720cc49a406') in 0.007885 seconds 
+  Import took 0.010892 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000308 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_MarketStandPosters.jpg
+  artifactKey: Guid(e2e1105de9506a44d98010655f8667ae) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_MarketStandPosters.jpg using Guid(e2e1105de9506a44d98010655f8667ae) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ef237a0bb47e432a0eda4abec619e013') in 0.011097 seconds 
+  Import took 0.014975 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000362 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Restaurant_Uniques&Gutter.jpg
+  artifactKey: Guid(1616a90ab1598934cba3deffc7d02e4c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Restaurant_Uniques&Gutter.jpg using Guid(1616a90ab1598934cba3deffc7d02e4c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9e140f7ca0c12462d4aa4efcabb9b32c') in 0.009384 seconds 
+  Import took 0.013351 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000398 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_GroundLevel_Dirt&Grass.jpg
+  artifactKey: Guid(98befcf8299750747af82d94921f3c8e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_GroundLevel_Dirt&Grass.jpg using Guid(98befcf8299750747af82d94921f3c8e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f0e302432bf5dc4cb62be8dc577186ad') in 0.009871 seconds 
+  Import took 0.014046 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000329 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Bench&Others.jpg
+  artifactKey: Guid(2154e013bfb07bb49af4dfea538333a0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Bench&Others.jpg using Guid(2154e013bfb07bb49af4dfea538333a0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '86f4654898d2b0454dd0abc8b784edeb') in 0.010334 seconds 
+  Import took 0.013702 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000295 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Opacity_Trash&Paper.jpg
+  artifactKey: Guid(0fcc6eca2ff962747b85e7043a25bb4c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Opacity_Trash&Paper.jpg using Guid(0fcc6eca2ff962747b85e7043a25bb4c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7689953eed40b1a58da0fff8e7ac76b1') in 0.008968 seconds 
+  Import took 0.013225 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000356 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_DrinkingFountain.jpg
+  artifactKey: Guid(91168873be043e14bad298db558f331c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_DrinkingFountain.jpg using Guid(91168873be043e14bad298db558f331c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2ccac942bbcc80bbd45249c98e709054') in 0.009468 seconds 
+  Import took 0.013119 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000313 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Opacity_PeoplesHouse_Railings.jpg
+  artifactKey: Guid(7c7708a2b6f748342880547e803a5d82) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Opacity_PeoplesHouse_Railings.jpg using Guid(7c7708a2b6f748342880547e803a5d82) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6b37e4a4bbbccc150192c5633fd8d240') in 0.008255 seconds 
+  Import took 0.011037 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000344 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Opacity_Water.jpg
+  artifactKey: Guid(61c43ff416b17c646b013bf5ae27a311) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Opacity_Water.jpg using Guid(61c43ff416b17c646b013bf5ae27a311) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5b5f23281b864032acd5299f4fb67558') in 0.013757 seconds 
+  Import took 0.016724 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000316 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_GroundLevel_wall.jpg
+  artifactKey: Guid(f5789800fc0ac2b4dba64589ca655c98) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_GroundLevel_wall.jpg using Guid(f5789800fc0ac2b4dba64589ca655c98) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'efba53187772815c19cc65963a81d63f') in 0.009245 seconds 
+  Import took 0.012102 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000310 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_ResaurantBoard.jpg
+  artifactKey: Guid(108a13e3953867046b96882712152f06) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_ResaurantBoard.jpg using Guid(108a13e3953867046b96882712152f06) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7e49b5ac5accc834599a43831139fea9') in 0.007941 seconds 
+  Import took 0.010688 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000298 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_PinkFlowers.jpg
+  artifactKey: Guid(effaa6f6624e1094abe0081390bb38f7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_PinkFlowers.jpg using Guid(effaa6f6624e1094abe0081390bb38f7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c5f809906f702837a3fb4d9e5ae01bcc') in 0.009578 seconds 
+  Import took 0.012595 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000336 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Opacity_SmallBushLeaves.jpg
+  artifactKey: Guid(770a85f8ca7fd5b43ab9fa4e0879d8f6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Opacity_SmallBushLeaves.jpg using Guid(770a85f8ca7fd5b43ab9fa4e0879d8f6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '57d7d28c1182047b6748d36ebb38c1e3') in 0.010297 seconds 
+  Import took 0.014189 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000330 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Fountain.jpg
+  artifactKey: Guid(d4639fe0949d7c84da16915ff754686c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Fountain.jpg using Guid(d4639fe0949d7c84da16915ff754686c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '73ac013deba47055ba972b406cc8525a') in 0.009638 seconds 
+  Import took 0.026696 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000373 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Opacity_PurpleFlower.jpg
+  artifactKey: Guid(ae04f26ce482dff4091f019f8fcf52df) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Opacity_PurpleFlower.jpg using Guid(ae04f26ce482dff4091f019f8fcf52df) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4196665ab8d86bfd88268b264e29dbe5') in 0.009801 seconds 
+  Import took 0.014498 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000332 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Opacity_WashingLine.jpg
+  artifactKey: Guid(1ec37464f0854ef4f8f939b59c574de0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Opacity_WashingLine.jpg using Guid(1ec37464f0854ef4f8f939b59c574de0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ca88fa2481ef5f2026b3c3754cf7b694') in 0.008958 seconds 
+  Import took 0.013070 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000340 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_FlowerPot&RestaurantChair.jpg
+  artifactKey: Guid(b3f8196ec33f22341aea718784e76920) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_FlowerPot&RestaurantChair.jpg using Guid(b3f8196ec33f22341aea718784e76920) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e1fef5cb22a7287ff44c2bc35612bbbe') in 0.008513 seconds 
+  Import took 0.011345 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000344 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Opacity_DoorOrnament.jpg
+  artifactKey: Guid(5cfdabb9f09d4ce45af8ce89da28631f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Opacity_DoorOrnament.jpg using Guid(5cfdabb9f09d4ce45af8ce89da28631f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e472fb47dee39eb097a58339aa83a016') in 0.008819 seconds 
+  Import took 0.011757 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000344 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_GreenFlower01.jpg
+  artifactKey: Guid(6730c3df3176e014583a15e27900e6b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_GreenFlower01.jpg using Guid(6730c3df3176e014583a15e27900e6b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '114606eb8a404978fda53ee6bee4c7b9') in 0.009293 seconds 
+  Import took 0.012231 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000294 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Barrel&Crate.jpg
+  artifactKey: Guid(e4798f75ea497cd408c4b62f5d676ef1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Barrel&Crate.jpg using Guid(e4798f75ea497cd408c4b62f5d676ef1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'dfe58afbf6dc7830785b3a68e15fba59') in 0.008084 seconds 
+  Import took 0.010867 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000302 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Doors.jpg
+  artifactKey: Guid(440d11bef2ff55846b91700447c7c226) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Doors.jpg using Guid(440d11bef2ff55846b91700447c7c226) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8ef66b69ad37a51af05a1465c46dfe5c') in 0.008209 seconds 
+  Import took 0.010903 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000296 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Opacity_HangingPlants.jpg
+  artifactKey: Guid(feb9e5afdf9d6f347b3b6007472dbde8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Opacity_HangingPlants.jpg using Guid(feb9e5afdf9d6f347b3b6007472dbde8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'eabf32b89482205c9a0560dfb0a9ee76') in 0.008631 seconds 
+  Import took 0.011668 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000348 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_PeoplesHouse_Rooftiles.jpg
+  artifactKey: Guid(95758cdcde64b904580ba75a6ff337b2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_PeoplesHouse_Rooftiles.jpg using Guid(95758cdcde64b904580ba75a6ff337b2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ac107b9db20d98182d2268fbeb56269a') in 0.011243 seconds 
+  Import took 0.014959 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000300 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Rug01.jpg
+  artifactKey: Guid(3a3a31ffc21f1384290741bcec543ac8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Rug01.jpg using Guid(3a3a31ffc21f1384290741bcec543ac8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '954282afaad6e75fa2c3f1baeff58115') in 0.010413 seconds 
+  Import took 0.024052 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000794 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_GroundLevel_Cobbles.jpg
+  artifactKey: Guid(2e0cae98587aa7f4fb04e1b193dbb163) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_GroundLevel_Cobbles.jpg using Guid(2e0cae98587aa7f4fb04e1b193dbb163) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '93832dd785ae9c9f7b57de616771a1cc') in 0.011458 seconds 
+  Import took 0.015657 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000326 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Restaurant_Chairback&Branch&IronWork.jpg
+  artifactKey: Guid(95646fce5f5c34a49800d8627ab19200) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Restaurant_Chairback&Branch&IronWork.jpg using Guid(95646fce5f5c34a49800d8627ab19200) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0e3f78458b32956baf69c999725191a4') in 0.009774 seconds 
+  Import took 0.013093 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000332 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_RestaurantTable.jpg
+  artifactKey: Guid(75d8e79f8b6777a4cb68c918aa71ac5f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_RestaurantTable.jpg using Guid(75d8e79f8b6777a4cb68c918aa71ac5f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '38d031aebd85a5fc9b4bfe5403788b88') in 0.008793 seconds 
+  Import took 0.011723 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000340 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Opacity_GreenFlower01.jpg
+  artifactKey: Guid(29ec23ee547f510419368a4cba2821ea) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Opacity_GreenFlower01.jpg using Guid(29ec23ee547f510419368a4cba2821ea) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7c753eb5678ebe934d938e74695f1ad8') in 0.008527 seconds 
+  Import took 0.011557 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000326 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Opacity_ShoppingTable.jpg
+  artifactKey: Guid(fc33a353353726f45ab4b85ee7c8a5eb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Opacity_ShoppingTable.jpg using Guid(fc33a353353726f45ab4b85ee7c8a5eb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0ba161fb194c41788b4e2e4cc1133010') in 0.008761 seconds 
+  Import took 0.011728 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000310 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Opacity_Restaurant_RailingsTilable.jpg
+  artifactKey: Guid(47d0b5afa593d024b9fbd7d908a8722c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Opacity_Restaurant_RailingsTilable.jpg using Guid(47d0b5afa593d024b9fbd7d908a8722c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b43f8b422123187445203f62745d2322') in 0.008006 seconds 
+  Import took 0.010773 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000301 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_HangingPlants.jpg
+  artifactKey: Guid(fce9afe7bb2c84748aaea97878db652b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_HangingPlants.jpg using Guid(fce9afe7bb2c84748aaea97878db652b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ad9f45c33a0e55c24183cb11aa13e8bb') in 0.008436 seconds 
+  Import took 0.011363 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000302 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_PeoplesHouse_Tilables.jpg
+  artifactKey: Guid(f9be572d34ca8db498c8b195fa5cf79f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_PeoplesHouse_Tilables.jpg using Guid(f9be572d34ca8db498c8b195fa5cf79f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1c5cbccd03a07c14605e00a9d79afd66') in 0.008944 seconds 
+  Import took 0.011949 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000381 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_GroundLevel_Trims.jpg
+  artifactKey: Guid(f046464c7043a094b93037aa603c65c8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_GroundLevel_Trims.jpg using Guid(f046464c7043a094b93037aa603c65c8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4114360dd3d0e6bae651a92e1437a273') in 0.010930 seconds 
+  Import took 0.014724 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000364 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_FlowerPot.jpg
+  artifactKey: Guid(333710e916a71ba4eb5be5ccd16f9304) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_FlowerPot.jpg using Guid(333710e916a71ba4eb5be5ccd16f9304) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '04dfc7de1071aa8f2f4e0564de85de3d') in 0.009511 seconds 
+  Import took 0.012462 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000358 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Restaurant_WallClaylike.jpg
+  artifactKey: Guid(5c23a6b48eff68e4d8934f1e7147fc75) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Restaurant_WallClaylike.jpg using Guid(5c23a6b48eff68e4d8934f1e7147fc75) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9c918d574ba3f1ae38ff052c5dc34546') in 0.010529 seconds 
+  Import took 0.016036 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000345 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_PeoplesHouseProps_Iron&Flowerpot&mag.jpg
+  artifactKey: Guid(c2042ebcb7545784da77219dbfa2d7f4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_PeoplesHouseProps_Iron&Flowerpot&mag.jpg using Guid(c2042ebcb7545784da77219dbfa2d7f4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '337c6d23aed0ed0f67c7a02504b6a369') in 0.010972 seconds 
+  Import took 0.014923 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000330 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_AnotherLanternGlass.jpg
+  artifactKey: Guid(30bbc3da087f2054fbc9750d8e90e32b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_AnotherLanternGlass.jpg using Guid(30bbc3da087f2054fbc9750d8e90e32b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'add7147299498ba5adb30653790ff364') in 0.011711 seconds 
+  Import took 0.015128 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000306 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_GroundLevel_Concrete.jpg
+  artifactKey: Guid(ca8cd48ef2b56c74db224314f8d0b5ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_GroundLevel_Concrete.jpg using Guid(ca8cd48ef2b56c74db224314f8d0b5ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3362ba9187304584abec6d90afb60360') in 0.008970 seconds 
+  Import took 0.012149 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000341 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Opacity_Restaurant_Chairback&Branch&IronWork.jpg
+  artifactKey: Guid(801fd70ed0b1ee64db2005b5eb2a4f0c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Opacity_Restaurant_Chairback&Branch&IronWork.jpg using Guid(801fd70ed0b1ee64db2005b5eb2a4f0c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ecbfdcad67b144fbc17b0552a745ac0e') in 0.008056 seconds 
+  Import took 0.010989 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000307 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Parasol.jpg
+  artifactKey: Guid(85ef0a98ffeb40243999544c2d8bb496) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Parasol.jpg using Guid(85ef0a98ffeb40243999544c2d8bb496) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '010f5bbdbd6cbd1f2a2117b745183384') in 0.010262 seconds 
+  Import took 0.014278 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000372 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_GroundLevel_Floor.jpg
+  artifactKey: Guid(cb327abdc8216ec429bb1eb9bf7144cd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_GroundLevel_Floor.jpg using Guid(cb327abdc8216ec429bb1eb9bf7144cd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '69e003f1e936162190c21b7227e00c66') in 0.008895 seconds 
+  Import took 0.012237 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000295 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Gieter.jpg
+  artifactKey: Guid(eec962798d98efe4c81f88c3dacaa016) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Gieter.jpg using Guid(eec962798d98efe4c81f88c3dacaa016) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0ce82e17490d1c8ee99800580f507525') in 0.008479 seconds 
+  Import took 0.011505 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000268 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_MarketStand.jpg
+  artifactKey: Guid(43c608e386a5f5a47bf11d5b5b6ada1a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_MarketStand.jpg using Guid(43c608e386a5f5a47bf11d5b5b6ada1a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c64cea0afeb27ee6f1fa2f9123c9627c') in 0.009922 seconds 
+  Import took 0.013280 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000363 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Restaurant_railingsTilable.jpg
+  artifactKey: Guid(1b95d34a042d12c4ab0a5b5cd2cae094) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Restaurant_railingsTilable.jpg using Guid(1b95d34a042d12c4ab0a5b5cd2cae094) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '855274a77a27566155658e59a859ec14') in 0.009442 seconds 
+  Import took 0.012568 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000455 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Opacity_Shop_Railings&Trims&FlowerWoods.jpg
+  artifactKey: Guid(03beb2e3a35beb949a31ade2bb1fc949) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Opacity_Shop_Railings&Trims&FlowerWoods.jpg using Guid(03beb2e3a35beb949a31ade2bb1fc949) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '60c954a86138036cc550844e5ad563c3') in 0.009475 seconds 
+  Import took 0.013031 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000349 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_PeoplesHouse_Wall.jpg
+  artifactKey: Guid(856eb93453ea0ce4e96c7066afb69697) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_PeoplesHouse_Wall.jpg using Guid(856eb93453ea0ce4e96c7066afb69697) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '43dd5831cbbf9b51cf3213e1659ccde1') in 0.012028 seconds 
+  Import took 0.015941 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000341 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_PeoplesHouse_Uniques.jpg
+  artifactKey: Guid(604963e56aa62334fbcc13e067b83ff9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_PeoplesHouse_Uniques.jpg using Guid(604963e56aa62334fbcc13e067b83ff9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '835921033256c2ac893039e59afb5caf') in 0.011085 seconds 
+  Import took 0.014729 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000335 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Restaurant_Doors&Windows.jpg
+  artifactKey: Guid(dbb97d3b1b0733f4991a33f8b9d5290e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Restaurant_Doors&Windows.jpg using Guid(dbb97d3b1b0733f4991a33f8b9d5290e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a0881b30c795846eab4d65121833b985') in 0.009896 seconds 
+  Import took 0.012925 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000316 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_AnotherLantern.jpg
+  artifactKey: Guid(b19771376d5bb214e8e75b73d71533c4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_AnotherLantern.jpg using Guid(b19771376d5bb214e8e75b73d71533c4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '784c9f2b950c97d840b9715363e7316c') in 0.008181 seconds 
+  Import took 0.017637 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000297 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_OliveTreeLeaves.jpg
+  artifactKey: Guid(6669e6ef9692da947a9f27c602ea0301) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_OliveTreeLeaves.jpg using Guid(6669e6ef9692da947a9f27c602ea0301) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '433ea1620dedebb7780720fceb164fe6') in 0.008054 seconds 
+  Import took 0.010689 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000325 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_GroundLevel_Grass.jpg
+  artifactKey: Guid(c8ab2c3f7abf9124da49a6240391af05) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_GroundLevel_Grass.jpg using Guid(c8ab2c3f7abf9124da49a6240391af05) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cd38d3029ecb98bb5e7b19ec68489846') in 0.009083 seconds 
+  Import took 0.012013 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000331 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Lavender.jpg
+  artifactKey: Guid(2dbfc0743f5995e4e9276ff8fe449763) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Lavender.jpg using Guid(2dbfc0743f5995e4e9276ff8fe449763) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b000e52af4a8ee04e0e90f440edfa2fe') in 0.009587 seconds 
+  Import took 0.012846 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000320 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_DoorOrnament.jpg
+  artifactKey: Guid(8bfdf7f2864342b4c88d04fa3ff61631) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_DoorOrnament.jpg using Guid(8bfdf7f2864342b4c88d04fa3ff61631) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '197fe35b930414a37a731ac17acb7a3f') in 0.008630 seconds 
+  Import took 0.011902 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000345 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_PeoplesHouse_FloorTiles.jpg
+  artifactKey: Guid(7f1684c70f06a854a9da93cda8ada75e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_PeoplesHouse_FloorTiles.jpg using Guid(7f1684c70f06a854a9da93cda8ada75e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c6c3e474ef50f342e1587beb6e9a088c') in 0.011626 seconds 
+  Import took 0.015003 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000346 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Restaurant_TrimsTileable.jpg
+  artifactKey: Guid(029231da7e1d45a44ba4f08b25633819) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Restaurant_TrimsTileable.jpg using Guid(029231da7e1d45a44ba4f08b25633819) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '377491f95746ddebcfc0d53d67a63bc6') in 0.010532 seconds 
+  Import took 0.013975 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000358 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_PeoplesHouse_Railings.jpg
+  artifactKey: Guid(ed4d8d72d899cfc4dbccf367a5463b4b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_PeoplesHouse_Railings.jpg using Guid(ed4d8d72d899cfc4dbccf367a5463b4b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ae108e51246a2667d9be3612e2e2d054') in 0.010664 seconds 
+  Import took 0.014937 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000349 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_OutdoorChairs.jpg
+  artifactKey: Guid(87c4c014c19524d488150e4d66847d6d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_OutdoorChairs.jpg using Guid(87c4c014c19524d488150e4d66847d6d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5dd286d6e57731994a0caa67a36c0bc8') in 0.010689 seconds 
+  Import took 0.014426 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000332 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Restaurant_TilesFloor.jpg
+  artifactKey: Guid(a7c80a43277d5e94d813d81c8c78f450) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Restaurant_TilesFloor.jpg using Guid(a7c80a43277d5e94d813d81c8c78f450) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '03778e22d05ec572c202687460c08022') in 0.010143 seconds 
+  Import took 0.014603 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000339 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Opacity_Lavender.jpg
+  artifactKey: Guid(c651af7afb1aff44ea1a2313df77374a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Opacity_Lavender.jpg using Guid(c651af7afb1aff44ea1a2313df77374a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9def18db93ee6771259edd5b0672dfa2') in 0.010716 seconds 
+  Import took 0.022684 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000340 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_PeoplesHouseProps.jpg
+  artifactKey: Guid(712b7374de8abc34982fdce3dd6ae2f4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_PeoplesHouseProps.jpg using Guid(712b7374de8abc34982fdce3dd6ae2f4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bc95d0323e08db4671a3f93d2d9686cf') in 0.009969 seconds 
+  Import took 0.013907 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000353 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/tex_Opacity_OliveTreeLeaves.jpg
+  artifactKey: Guid(02ac6837b55337743b0526e88c8be509) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/tex_Opacity_OliveTreeLeaves.jpg using Guid(02ac6837b55337743b0526e88c8be509) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0f4f252d99cc6d352b6ba579bc46556f') in 0.010835 seconds 
+  Import took 0.014710 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 83.654004 seconds.
+  path: Assets/Models/Cityscene Riomaggiore/Cityscene Riomaggiore.fbx
+  artifactKey: Guid(768b4a5050e06474f99c041cdca63987) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Models/Cityscene Riomaggiore/Cityscene Riomaggiore.fbx using Guid(768b4a5050e06474f99c041cdca63987) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c3fc54f3a97fc1ce2a37cd2f6d75a442') in 0.500469 seconds 
+  Import took 0.506760 seconds .
+

@@ -15,7 +15,18 @@ public class SceneManagerEditor : Editor
         {
             sceneManager.ProcessLevel();
         }
-        buildTrees = GUILayout.Toggle(buildTrees, "Build Trees");
+
+        if (!buildTrees)
+        {
+            ActiveEditorTracker.sharedTracker.isLocked = false;
+            buildTrees = GUILayout.Toggle(buildTrees, "Build Trees (Click to Start)", "Button");
+        }
+        else
+        {
+            ActiveEditorTracker.sharedTracker.isLocked = true;
+            buildTrees = GUILayout.Toggle(buildTrees, "Build Trees (Click to Stop)", "Button");
+        }
+
         DrawDefaultInspector();
         if (sceneManager.useCustomVolume)
         {
