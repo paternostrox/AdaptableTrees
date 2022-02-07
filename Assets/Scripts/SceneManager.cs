@@ -72,7 +72,7 @@ public class SceneManager : MonoBehaviour
         //Vector3 floodStartPos = levelBounds.center + Vector3.up * (size.y/2f - halfUnitSize);
         Vector3 floodStartPos = levelBounds.max - halfUnitSizeVec;
         print(floodStartPos);
-        FloodFill(floodStartPos);
+        FloodFillQueue(floodStartPos);
 
         Tree[] childTrees = transform.GetComponentsInChildren<Tree>();
         foreach(Tree t in childTrees)
@@ -120,7 +120,7 @@ public class SceneManager : MonoBehaviour
             if (!levelBounds.Contains(currPos))
                 continue;
 
-            Unit unit = units[WorldToGrid(pos)];
+            Unit unit = units[WorldToGrid(currPos)];
 
             if (unit.visited)
                 continue;
