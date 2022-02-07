@@ -1,13 +1,22 @@
 ﻿using System.Collections;
 using UnityEngine;
-public struct Unit
+public class Unit
 {
+    public Vector3 position;
+    public bool occupied;
+    public bool visited;
+
     public Unit(Vector3 position, bool isOccupied)
     {
         this.position = position;
-        this.isOccupied = isOccupied;
+        this.occupied = isOccupied;
+        this.visited = false;
     }
 
-    public Vector3 position;
-    public bool isOccupied;
+    public Unit(Vector3 position)
+    {
+        this.position = position;
+        this.occupied = true;
+        this.visited = false;
+    }
 }

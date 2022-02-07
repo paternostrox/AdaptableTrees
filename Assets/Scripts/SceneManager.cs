@@ -10,6 +10,7 @@ public class SceneManager : MonoBehaviour
 {
     [SerializeField] Vector3Int size;
     [SerializeField] float unitSize = 1;
+    Bounds levelBounds;
     Vector3 halfUnitSizeVec;
     Vector3 offset;
 
@@ -47,10 +48,11 @@ public class SceneManager : MonoBehaviour
     public void ProcessLevel()
     {
         units = new Unit[Mathf.RoundToInt(size.x * size.y * size.z / Mathf.Pow(unitSize, 3))];
-        Vector3 halfSize = size / 2;
-        halfSize.y = 0;
-        offset = transform.position - halfSize;
+        Vector3 halfSize = size;
+        halfSize = halfSize / 2f;
+        offset = transform.position - new Vector3(halfSize.x, 0, halfSize.z);
         float halfUnitSize = unitSize / 2f;
+        levelBounds = new Bounds(transform.position + Vector3.up * halfSize.y, size);
         //Vector3 halfUnitSizeVec = Vector3.one * halfUnitSize;
         halfUnitSizeVec = Vector3.one * halfUnitSize * .99f;
         for (float i = halfUnitSize; i < size.x; i+=unitSize)
@@ -60,18 +62,84 @@ public class SceneManager : MonoBehaviour
                 for (float k = halfUnitSize; k < size.z; k += unitSize)
                 {
                     Vector3 pos = new Vector3(i, j, k) + offset;
-                    bool isOccupied = Physics.CheckBox(pos, halfUnitSizeVec);
-                    Unit unit = new Unit(pos, isOccupied);
+                    //bool isOccupied = Physics.CheckBox(pos, halfUnitSizeVec);
+                    Unit unit = new Unit(pos);
                     units[WorldToGrid(pos)] = unit;
                 }
             }
         }
+
+        //Vector3 floodStartPos = levelBounds.center + Vector3.up * (size.y/2f - halfUnitSize);
+        Vector3 floodStartPos = levelBounds.max - halfUnitSizeVec;
+        print(floodStartPos);
+        FloodFill(floodStartPos);
 
         Tree[] childTrees = transform.GetComponentsInChildren<Tree>();
         foreach(Tree t in childTrees)
         {
             t.getFreeUnits = GetFreeUnits;
         }
+    }
+
+    private void FloodFill(Vector3 pos)
+    {
+        if (!levelBounds.Contains(pos))
+            return;
+
+        Unit unit = units[WorldToGrid(pos)];
+
+        if (unit.visited)
+            return;
+
+        unit.visited = true;
+        print(units[WorldToGrid(pos)].visited);
+
+        if (Physics.CheckBox(pos, halfUnitSizeVec))
+            return;
+
+        unit.occupied = false;
+
+        FloodFill(pos + unitSize * Vector3.right);
+        FloodFill(pos + unitSize * Vector3.left);
+        FloodFill(pos + unitSize * Vector3.up);
+        FloodFill(pos + unitSize * Vector3.down);
+        FloodFill(pos + unitSize * Vector3.forward);
+        FloodFill(pos + unitSize * Vector3.back);
+    }
+
+    private void FloodFillQueue(Vector3 pos)
+    {
+        Queue<Vector3> toFill = new Queue<Vector3>();
+
+        toFill.Enqueue(pos);
+
+        while(toFill.Count > 0)
+        {
+            Vector3 currPos = toFill.Dequeue();
+
+            if (!levelBounds.Contains(currPos))
+                continue;
+
+            Unit unit = units[WorldToGrid(pos)];
+
+            if (unit.visited)
+                continue;
+
+            unit.visited = true;
+
+            if (Physics.CheckBox(currPos, halfUnitSizeVec))
+                continue;
+
+            unit.occupied = false;
+
+            toFill.Enqueue(currPos + unitSize * Vector3.right);
+            toFill.Enqueue(currPos + unitSize * Vector3.left);
+            toFill.Enqueue(currPos + unitSize * Vector3.up);
+            toFill.Enqueue(currPos + unitSize * Vector3.down);
+            toFill.Enqueue(currPos + unitSize * Vector3.forward);
+            toFill.Enqueue(currPos + unitSize * Vector3.back);
+        }
+
     }
 
     public void MouseInteraction()
@@ -122,11 +190,11 @@ public class SceneManager : MonoBehaviour
                 {
                     Vector3 fixedPos = position + new Vector3(i, j, k);
                     Unit unit = units[WorldToGrid(fixedPos)];
-                    if(!unit.isOccupied)
+                    if(!unit.occupied)
                     {
                         if(useCustomVolume)
                         {
-                            if(!Physics.CheckBox(fixedPos, halfUnitSizeVec, Quaternion.identity))
+                            if(!Physics.CheckBox(fixedPos, halfUnitSizeVec))
                             {
                                 continue;
                             }
@@ -162,7 +230,7 @@ public class SceneManager : MonoBehaviour
         {
             for(int i=0; i<units.Length;i++)
             {
-                if (units[i].isOccupied && showOccupied)
+                if (units[i].occupied && showOccupied)
                 {
                     Gizmos.color = occupiedColor;
                     Gizmos.DrawCube(units[i].position, unitSizeVec);
