@@ -23,7 +23,7 @@ public class SceneManager : MonoBehaviour
     public Unit[] units;
 
     public float treeHeight = 10f;
-    public Vector3 treeHalfExtents = Vector3.one;
+    public Vector3 treeSize = Vector3.one;
     public float treeThickness = .05f;
     public int treeTubeVertexAmount = 5;
     public Material treeMaterial;
@@ -72,45 +72,19 @@ public class SceneManager : MonoBehaviour
         //Vector3 floodStartPos = levelBounds.center + Vector3.up * (size.y/2f - halfUnitSize);
         Vector3 floodStartPos = levelBounds.max - halfUnitSizeVec;
         print(floodStartPos);
-        FloodFillQueue(floodStartPos);
+        FloodFill(floodStartPos);
 
         Tree[] childTrees = transform.GetComponentsInChildren<Tree>();
         foreach(Tree t in childTrees)
         {
-            t.getFreeUnits = GetFreeUnits;
+            t.getFreeUnits = GetFreeUnitsFloodFill;
         }
     }
 
     private void FloodFill(Vector3 pos)
     {
-        if (!levelBounds.Contains(pos))
-            return;
-
-        Unit unit = units[WorldToGrid(pos)];
-
-        if (unit.visited)
-            return;
-
-        unit.visited = true;
-        print(units[WorldToGrid(pos)].visited);
-
-        if (Physics.CheckBox(pos, halfUnitSizeVec))
-            return;
-
-        unit.occupied = false;
-
-        FloodFill(pos + unitSize * Vector3.right);
-        FloodFill(pos + unitSize * Vector3.left);
-        FloodFill(pos + unitSize * Vector3.up);
-        FloodFill(pos + unitSize * Vector3.down);
-        FloodFill(pos + unitSize * Vector3.forward);
-        FloodFill(pos + unitSize * Vector3.back);
-    }
-
-    private void FloodFillQueue(Vector3 pos)
-    {
+        bool[] visitedTable = new bool[Mathf.RoundToInt(size.x * size.y * size.z / Mathf.Pow(unitSize, 3))];
         Queue<Vector3> toFill = new Queue<Vector3>();
-
         toFill.Enqueue(pos);
 
         while(toFill.Count > 0)
@@ -120,17 +94,15 @@ public class SceneManager : MonoBehaviour
             if (!levelBounds.Contains(currPos))
                 continue;
 
-            Unit unit = units[WorldToGrid(currPos)];
-
-            if (unit.visited)
+            if (visitedTable[WorldToGrid(currPos)])
                 continue;
 
-            unit.visited = true;
+            visitedTable[WorldToGrid(currPos)] = true;
 
             if (Physics.CheckBox(currPos, halfUnitSizeVec))
                 continue;
 
-            unit.occupied = false;
+            units[WorldToGrid(currPos)].occupied = false;
 
             toFill.Enqueue(currPos + unitSize * Vector3.right);
             toFill.Enqueue(currPos + unitSize * Vector3.left);
@@ -170,9 +142,55 @@ public class SceneManager : MonoBehaviour
         GameObject go = new GameObject("Tree");
         go.transform.SetParent(transform);
         Tree tree = go.AddComponent<Tree>();
-        tree.Init(position, GetFreeUnits, treeMaterial, treeHalfExtents, treeHeight, nodeKillDistance, 
+        tree.Init(position, GetFreeUnitsFloodFill, treeMaterial, treeSize, treeHeight, nodeKillDistance, 
             nodeAttractionDistance, nodeSegmentLength, attractorsAmount, treeThickness, treeTubeVertexAmount, unitSize / 2f);
         tree.TreeRegen();
+    }
+
+    public Unit[] GetFreeUnitsFloodFill(Vector3 position, Vector3 treeSize)
+    {
+        List<Unit> freeUnits = new List<Unit>();
+
+        bool[] visitedTable = new bool[Mathf.RoundToInt(size.x * size.y * size.z / Mathf.Pow(unitSize, 3))];
+        Queue<Vector3> toFill = new Queue<Vector3>();
+
+        Vector3 bottomCenter = position - Vector3.up * ((treeSize.y / 2) - halfUnitSizeVec.y);
+        toFill.Enqueue(bottomCenter);
+
+        Bounds treeBounds = new Bounds(position, treeSize);
+
+        if (useCustomVolume)
+            treeGenVolume.transform.position = position;
+
+
+        while (toFill.Count > 0)
+        {
+            Vector3 currPos = toFill.Dequeue();
+
+            if (!treeBounds.Contains(currPos))
+                continue;
+
+            if (visitedTable[WorldToGrid(currPos)])
+                continue;
+
+            visitedTable[WorldToGrid(currPos)] = true;
+
+            Unit unit = units[WorldToGrid(currPos)];
+
+            if (unit.occupied)
+                continue;
+
+            freeUnits.Add(unit);
+
+            toFill.Enqueue(currPos + unitSize * Vector3.right);
+            toFill.Enqueue(currPos + unitSize * Vector3.left);
+            toFill.Enqueue(currPos + unitSize * Vector3.up);
+            toFill.Enqueue(currPos + unitSize * Vector3.down);
+            toFill.Enqueue(currPos + unitSize * Vector3.forward);
+            toFill.Enqueue(currPos + unitSize * Vector3.back);
+        }
+
+        return freeUnits.ToArray();
     }
 
     public Unit[] GetFreeUnits(Vector3 position, Vector3 halfExtents)

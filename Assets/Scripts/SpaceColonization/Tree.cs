@@ -14,7 +14,7 @@ public class Tree : MonoBehaviour
     bool built = false;
     public bool showCrown = false;
 
-    public Vector3 halfExtents;
+    public Vector3 size;
     public float height;
     public float killDistance;
     public float attractionDistance;
@@ -47,7 +47,7 @@ public class Tree : MonoBehaviour
         nodes.Add(new Node(null, transform.position));
 
         // Populate tree crown with attractors
-        crownUnits = getFreeUnits(transform.position + Vector3.up * height, halfExtents);
+        crownUnits = getFreeUnits(transform.position + Vector3.up * height, size);
         int amountPerUnit = Mathf.CeilToInt(((float)attractorsAmount) / crownUnits.Length);
 
         foreach (Unit unit in crownUnits)
@@ -66,7 +66,7 @@ public class Tree : MonoBehaviour
     }
 
     public void Init(Vector3 position, Func<Vector3, Vector3, Unit[]> getFreeUnits, Material material,
-        Vector3 halfExtents, float height, float killDistance, float attractionDistance, 
+        Vector3 size, float height, float killDistance, float attractionDistance, 
         float segmentLength, int attractorsAmount, float tubeRadius, int tubeVertexAmount, float unitHalfSize)
     {
         // INIT
@@ -80,7 +80,7 @@ public class Tree : MonoBehaviour
         this.getFreeUnits = getFreeUnits;
         meshRenderer.material = material;
 
-        this.halfExtents = halfExtents;
+        this.size = size;
         this.height = height;
         this.killDistance = killDistance;
         this.attractionDistance = attractionDistance;
