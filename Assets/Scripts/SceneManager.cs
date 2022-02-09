@@ -22,10 +22,12 @@ public class SceneManager : MonoBehaviour
 
     public Unit[] units;
 
+    public int treeTubeVertexAmount = 5;
     public float treeHeight = 10f;
     public Vector3 treeSize = Vector3.one;
-    public float treeThickness = .05f;
-    public int treeTubeVertexAmount = 5;
+    public float treeBaseThickness = .05f;
+    public float treeStepThickness = .2f;
+    public float treeMaxDiffThickness = .6f;
     public Material treeMaterial;
 
     public float nodeKillDistance = .2f;
@@ -143,7 +145,8 @@ public class SceneManager : MonoBehaviour
         go.transform.SetParent(transform);
         Tree tree = go.AddComponent<Tree>();
         tree.Init(position, GetFreeUnitsFloodFill, treeMaterial, treeSize, treeHeight, nodeKillDistance, 
-            nodeAttractionDistance, nodeSegmentLength, attractorsAmount, treeThickness, treeTubeVertexAmount, unitSize / 2f);
+            nodeAttractionDistance, nodeSegmentLength, attractorsAmount, treeTubeVertexAmount,
+            treeBaseThickness, treeStepThickness, treeMaxDiffThickness, unitSize / 2f);
         tree.TreeRegen();
     }
 

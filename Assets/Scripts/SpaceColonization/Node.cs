@@ -14,7 +14,7 @@ public class Node
     public float thickness = 1f;
 
     // jitter to avoid getting stuck
-    static float jitterAmount = .01f;
+    static float jitterAmount = .001f;
 
     public Node(Node parent, Vector3 position)
     {
@@ -33,7 +33,7 @@ public class Node
             averageDirection += (a.position - position).normalized;
         }
         // add jitter to avoid getting stuck
-        averageDirection += new Vector3(Random.Range(-jitterAmount, jitterAmount), Random.Range(-jitterAmount, jitterAmount), Random.Range(-jitterAmount, jitterAmount)).normalized;
+        //averageDirection += new Vector3(Random.Range(-jitterAmount, jitterAmount), Random.Range(-jitterAmount, jitterAmount), Random.Range(-jitterAmount, jitterAmount)).normalized;
 
         averageDirection.Normalize();
 
@@ -43,10 +43,6 @@ public class Node
     public Node GetNextNode(float segmentLength)
     {
         Vector3 nextPosition = position + GetAverageDirection() * segmentLength;
-        //if(nextPosition.y > SceneManager.Instance.treeHeight + SceneManager.Instance.treeSize)
-        //{
-        //    Debug.Log("Shootout! Pos is: " + nextPosition);
-        //}
 
         return new Node(this, nextPosition);
     }

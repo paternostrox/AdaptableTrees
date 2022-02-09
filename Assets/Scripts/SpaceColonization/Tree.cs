@@ -22,7 +22,9 @@ public class Tree : MonoBehaviour
     public int attractorsAmount;
 
     public int tubeVertexAmount;
-    public float thickness;
+    public float baseThickness;
+    public float stepThickness;
+    public float maxDiffThickness;
     float unitHalfSize;
     Vector3 unitVec;
 
@@ -53,6 +55,9 @@ public class Tree : MonoBehaviour
 
     public void TreeRegen()
     {
+        if (killDistance > attractionDistance)
+            throw new Exception("Tree could not be built. KillDistance should not be smaller then AttractionDistance.");
+
         // Clear current tree
         nodes.Clear();
         attractors.Clear();
@@ -65,6 +70,14 @@ public class Tree : MonoBehaviour
         crownUnits = getFreeUnits(transform.position + Vector3.up * height, size);
         int amountPerUnit = Mathf.CeilToInt(((float)attractorsAmount) / crownUnits.Length);
 
+        // Add trunk attractors
+        for(float h= attractionDistance/3f; h < height - size.y/2f + unitHalfSize; h+=attractionDistance/3f)
+        {
+            Attractor attractor = new Attractor(transform.position + Vector3.up * h);
+            attractors.Add(attractor);
+        }
+
+        // Add crown attractors
         foreach (Unit unit in crownUnits)
         {
             for (int i = 0; i < amountPerUnit; i++)
@@ -76,13 +89,15 @@ public class Tree : MonoBehaviour
             }
         }
 
+        DebugAttractors(attractors);
+
         BuildTree();
         EditorCoroutineUtility.StartCoroutine(RenderTree(), this);
     }
 
     public void Init(Vector3 position, Func<Vector3, Vector3, Unit[]> getFreeUnits, Material material,
         Vector3 size, float height, float killDistance, float attractionDistance, 
-        float segmentLength, int attractorsAmount, float tubeRadius, int tubeVertexAmount, float unitHalfSize)
+        float segmentLength, int attractorsAmount, int tubeVertexAmount, float tubeRadius, float stepThickness, float maxDiffThickness, float unitHalfSize)
     {
         // INIT
         meshFilter = GetComponent<MeshFilter>();
@@ -102,7 +117,9 @@ public class Tree : MonoBehaviour
         this.segmentLength = segmentLength;
 
         this.attractorsAmount = attractorsAmount;
-        this.thickness = tubeRadius;
+        this.baseThickness = tubeRadius;
+        this.stepThickness = stepThickness;
+        this.maxDiffThickness = maxDiffThickness;
         this.tubeVertexAmount = tubeVertexAmount;
         this.unitHalfSize = unitHalfSize;
         unitVec = Vector3.one * unitHalfSize * 2f;
@@ -123,6 +140,7 @@ public class Tree : MonoBehaviour
                 }
             }
 
+            int nodesCount = nodes.Count;
             for (int i = 0; i < nodes.Count; i++)
             {
                 Node node = nodes[i];
@@ -134,6 +152,8 @@ public class Tree : MonoBehaviour
                 }
                 node.influencingAttractors.Clear();
             }
+            if (nodes.Count == nodesCount)
+                break;
 
             for (int i = attractors.Count - 1; i >= 0; i--)
             {
@@ -153,9 +173,9 @@ public class Tree : MonoBehaviour
                 // When there are multiple child nodes, use the thickest
                 while (node.parent != null)
                 {
-                    if (node.parent.thickness < node.thickness + .7f)
+                    if (node.parent.thickness < node.thickness + maxDiffThickness)
                     {
-                        node.parent.thickness += .3f;
+                        node.parent.thickness += stepThickness;
                     }
                     node = node.parent;
                 }
@@ -222,8 +242,8 @@ public class Tree : MonoBehaviour
         mesh.normals.CopyTo(normals, 0);
 
         // Creates new tube and adds it to arrays
-        Vector3[] bottomRing = GetRing(parent.position, parent.directionFromParent, thickness*parent.thickness);
-        Vector3[] topRing = GetRing(node.position, node.directionFromParent, thickness*node.thickness);
+        Vector3[] bottomRing = GetRing(parent.position, parent.directionFromParent, baseThickness*parent.thickness);
+        Vector3[] topRing = GetRing(node.position, node.directionFromParent, baseThickness*node.thickness);
 
         for (int leftEdge=0; leftEdge<tubeVertexAmount; leftEdge++)
         {
@@ -268,6 +288,16 @@ public class Tree : MonoBehaviour
             ring[i] = vertexPos;
         }
         return ring;
+    }
+
+    public GameObject debugObj;
+    private void DebugAttractors(List<Attractor> attractors)
+    {
+        GameObject g = new GameObject("Debug");
+        foreach (Attractor a in attractors)
+        {
+            Instantiate(debugObj, a.position, Quaternion.identity, g.transform);
+        }
     }
 
     private void OnDrawGizmos()
