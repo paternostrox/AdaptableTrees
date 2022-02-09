@@ -167,7 +167,7 @@ public class SceneManager : MonoBehaviour
         {
             Vector3 currPos = toFill.Dequeue();
 
-            if (!treeBounds.Contains(currPos))
+            if (!treeBounds.Contains(currPos) || !levelBounds.Contains(currPos))
                 continue;
 
             if (visitedTable[WorldToGrid(currPos)])
@@ -237,7 +237,7 @@ public class SceneManager : MonoBehaviour
     {
         Vector3 center = transform.position;
         Vector3 unitSizeVec = unitSize * Vector3.one;
-        center.y += size.y / 2;
+        center.y += size.y / 2f;
         Gizmos.color = Color.blue;
         Gizmos.DrawWireCube(center, size);
 

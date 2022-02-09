@@ -36,6 +36,21 @@ public class Tree : MonoBehaviour
     float timer;
     public Func<Vector3, Vector3, Unit[]> getFreeUnits;
 
+    GameObject builderBasis;
+
+    private void Awake()
+    {
+        meshFilter = GetComponent<MeshFilter>();
+        meshRenderer = GetComponent<MeshRenderer>();
+        if(transform.childCount > 0)
+            builderBasis = transform.GetChild(0).gameObject;
+        else
+        {
+            builderBasis = new GameObject("Builder");
+            builderBasis.transform.parent = transform;
+        }
+    }
+
     public void TreeRegen()
     {
         // Clear current tree
@@ -237,8 +252,6 @@ public class Tree : MonoBehaviour
         newMesh.normals = normals;
         meshFilter.mesh = newMesh;
     }
-
-    GameObject builderBasis;
 
     public Vector3[] GetRing(Vector3 pos, Vector3 localUp, float radius)
     {
