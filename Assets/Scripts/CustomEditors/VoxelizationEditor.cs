@@ -3,14 +3,14 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
 
-[CustomEditor(typeof(SceneManager))]
-public class SceneManagerEditor : Editor
+[CustomEditor(typeof(Voxelization))]
+public class VoxelizationEditor : Editor
 {
     private bool buildTrees = false;
 
     public override void OnInspectorGUI()
     {
-        SceneManager sceneManager = (SceneManager)target;
+        Voxelization sceneManager = (Voxelization)target;
         if (GUILayout.Button("Rebuild Discretization"))
         {
             sceneManager.ProcessLevel();
@@ -40,7 +40,7 @@ public class SceneManagerEditor : Editor
     {
         if(buildTrees)
         {
-            SceneManager sceneManager = (SceneManager)target;
+            Voxelization sceneManager = (Voxelization)target;
             sceneManager.MouseInteraction();
         }
     }

@@ -19,6 +19,7 @@ public class AdaptableTree : MonoBehaviour
     public float attractionDistance;
     public float segmentLength;
     public int attractorsAmount;
+    public bool abortCollidingBranches = true;
 
     public int tubeVertexAmount;
     public float baseThickness;
@@ -35,7 +36,7 @@ public class AdaptableTree : MonoBehaviour
 
     Unit[] crownUnits;
     float timer;
-    public Func<Vector3, Vector3, Unit[]> getFreeUnits;
+    public Voxelization voxelization;
 
     GameObject builderBasis;
 
@@ -73,7 +74,7 @@ public class AdaptableTree : MonoBehaviour
         nodes.Add(new Node(null, transform.position));
 
         // Populate tree crown with attractors
-        crownUnits = getFreeUnits(transform.position + Vector3.up * height, size);
+        crownUnits = voxelization.GetFreeUnitsFloodFill(transform.position + Vector3.up * height, size);
         int amountPerUnit = Mathf.CeilToInt(((float)attractorsAmount) / crownUnits.Length);
 
         // Add trunk attractors
@@ -104,9 +105,10 @@ public class AdaptableTree : MonoBehaviour
         EditorCoroutineUtility.StartCoroutine(RenderTree(), this);
     }
 
-    public void Init(Vector3 position, Func<Vector3, Vector3, Unit[]> getFreeUnits, Material material,
+    public void Init(Voxelization voxelization, Vector3 position, Material material,
         Vector3 size, float height, float killDistance, float attractionDistance, 
-        float segmentLength, int attractorsAmount, int tubeVertexAmount, float tubeRadius, float stepThickness, float maxDiffThickness, float unitHalfSize)
+        float segmentLength, int attractorsAmount, bool abortCollidingBranches, 
+        int tubeVertexAmount, float tubeRadius, float stepThickness, float maxDiffThickness, float unitHalfSize)
     {
         // INIT
         meshFilter = GetComponent<MeshFilter>();
@@ -115,8 +117,8 @@ public class AdaptableTree : MonoBehaviour
         builderBasis.transform.parent = transform;
 
         // Attributions
+        this.voxelization = voxelization;
         transform.position = position;
-        this.getFreeUnits = getFreeUnits;
         meshRenderer.material = material;
 
         this.size = size;
@@ -124,8 +126,9 @@ public class AdaptableTree : MonoBehaviour
         this.killDistance = killDistance;
         this.attractionDistance = attractionDistance;
         this.segmentLength = segmentLength;
-
         this.attractorsAmount = attractorsAmount;
+        this.abortCollidingBranches = abortCollidingBranches;
+
         this.baseThickness = tubeRadius;
         this.stepThickness = stepThickness;
         this.maxDiffThickness = maxDiffThickness;
@@ -155,7 +158,13 @@ public class AdaptableTree : MonoBehaviour
                 Node node = nodes[i];
                 if (node.influencingAttractors.Count > 0)
                 {
-                    Node nextNode = node.GetNextNode(segmentLength);
+                    Vector3 nextPosition = node.position + node.GetAverageDirection() * segmentLength;
+
+                    // NOT IDEAL, BUT WORKS!!! :)
+                    if (abortCollidingBranches && voxelization.GetUnit(nextPosition).occupied)
+                        continue;
+
+                    Node nextNode = new Node(node, nextPosition);
                     nodes.Add(nextNode);
                     node.isTip = false;
                 }

@@ -6,7 +6,7 @@ using UnityEngine;
 #if(UNITY_EDITOR)
 
 [ExecuteInEditMode]
-public class SceneManager : MonoBehaviour
+public class Voxelization : MonoBehaviour
 {
     [SerializeField] Vector3Int size;
     [SerializeField] float unitSize = 1;
@@ -25,16 +25,16 @@ public class SceneManager : MonoBehaviour
     public int treeTubeVertexAmount = 5;
     public float treeHeight = 10f;
     public Vector3 treeSize = Vector3.one;
-    public float treeBaseThickness = .05f;
-    public float treeStepThickness = .2f;
-    public float treeMaxDiffThickness = .6f;
-    public Material treeMaterial;
+    public bool abortCollidingBranches = true;
 
     public float nodeKillDistance = .2f;
     public float nodeAttractionDistance = 10f;
     public float nodeSegmentLength = .1f;
-
     public int attractorsAmount = 100;
+    public float treeBaseThickness = .05f;
+    public float treeStepThickness = .2f;
+    public float treeMaxDiffThickness = .6f;
+    public Material treeMaterial;
 
     public bool useCustomVolume = false;
     [HideInInspector]
@@ -78,7 +78,7 @@ public class SceneManager : MonoBehaviour
         AdaptableTree[] childTrees = transform.GetComponentsInChildren<AdaptableTree>();
         foreach(AdaptableTree t in childTrees)
         {
-            t.getFreeUnits = GetFreeUnitsFloodFill;
+            t.voxelization = this;
         }
     }
 
@@ -143,9 +143,9 @@ public class SceneManager : MonoBehaviour
         GameObject go = new GameObject("Tree");
         go.transform.SetParent(transform);
         AdaptableTree tree = go.AddComponent<AdaptableTree>();
-        tree.Init(position, GetFreeUnitsFloodFill, treeMaterial, treeSize, treeHeight, nodeKillDistance, 
-            nodeAttractionDistance, nodeSegmentLength, attractorsAmount, treeTubeVertexAmount,
-            treeBaseThickness, treeStepThickness, treeMaxDiffThickness, unitSize / 2f);
+        tree.Init(this, position, treeMaterial, treeSize, treeHeight, nodeKillDistance, 
+            nodeAttractionDistance, nodeSegmentLength, attractorsAmount, abortCollidingBranches, 
+            treeTubeVertexAmount, treeBaseThickness, treeStepThickness, treeMaxDiffThickness, unitSize / 2f);
         tree.TreeRegen();
     }
 
@@ -228,11 +228,16 @@ public class SceneManager : MonoBehaviour
         return freeUnits.ToArray();
     }
 
-    private int WorldToGrid(Vector3 worldPos)
+    public Unit GetUnit(Vector3 worldPosition)
     {
-        worldPos -= offset;
-        return Mathf.FloorToInt(worldPos.x / unitSize) + Mathf.RoundToInt(size.x / unitSize) * (Mathf.FloorToInt(worldPos.y / unitSize) 
-            + Mathf.RoundToInt(size.y / unitSize) * Mathf.FloorToInt(worldPos.z / unitSize));
+        return units[WorldToGrid(worldPosition)];
+    }
+
+    private int WorldToGrid(Vector3 worldPosition)
+    {
+        worldPosition -= offset;
+        return Mathf.FloorToInt(worldPosition.x / unitSize) + Mathf.RoundToInt(size.x / unitSize) * (Mathf.FloorToInt(worldPosition.y / unitSize) 
+            + Mathf.RoundToInt(size.y / unitSize) * Mathf.FloorToInt(worldPosition.z / unitSize));
     }
 
     private void OnDrawGizmos()
