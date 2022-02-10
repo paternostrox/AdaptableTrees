@@ -2,12 +2,12 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(Tree))]
+[CustomEditor(typeof(AdaptableTree))]
 public class TreeEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        Tree tree = (Tree)target;
+        AdaptableTree tree = (AdaptableTree)target;
         if (GUILayout.Button("Regenerate Tree"))
         {
             tree.TreeRegen();

@@ -47,7 +47,7 @@ public class FreeCam : MonoBehaviour
     /// <summary>
     /// Set to true when free looking (on right mouse button).
     /// </summary>
-    private bool looking = false;
+    //private bool looking = false;
 
     private void Start()
     {
@@ -130,7 +130,7 @@ public class FreeCam : MonoBehaviour
     /// </summary>
     public void StartLooking()
     {
-        looking = true;
+        //looking = true;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -140,7 +140,7 @@ public class FreeCam : MonoBehaviour
     /// </summary>
     public void StopLooking()
     {
-        looking = false;
+        //looking = false;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }

@@ -9,9 +9,8 @@ using Random = UnityEngine.Random;
 [ExecuteInEditMode]
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
-public class Tree : MonoBehaviour
+public class AdaptableTree : MonoBehaviour
 {
-    bool built = false;
     public bool showCrown = false;
 
     public Vector3 size;
@@ -53,10 +52,17 @@ public class Tree : MonoBehaviour
         }
     }
 
-    public void TreeRegen()
+    public void CheckIntegrity()
     {
         if (killDistance > attractionDistance)
-            throw new Exception("Tree could not be built. KillDistance should not be smaller then AttractionDistance.");
+            throw new Exception("Tree could not be built. KillDistance should be smaller than AttractionDistance.");
+        if (killDistance < segmentLength)
+            throw new Exception("Tree could not be built. KillDistance should be bigger than AttractionDistance.");
+    }
+
+    public void TreeRegen()
+    {
+        
 
         // Clear current tree
         nodes.Clear();
@@ -71,11 +77,13 @@ public class Tree : MonoBehaviour
         int amountPerUnit = Mathf.CeilToInt(((float)attractorsAmount) / crownUnits.Length);
 
         // Add trunk attractors
-        for(float h= attractionDistance/3f; h < height - size.y/2f + unitHalfSize; h+=attractionDistance/3f)
+        for (float h = killDistance / 8f; h < height - size.y / 2f + unitHalfSize; h += killDistance / 8f)
         {
             Attractor attractor = new Attractor(transform.position + Vector3.up * h);
             attractors.Add(attractor);
         }
+
+        // Random does not work on existing trees if code is changed
 
         // Add crown attractors
         foreach (Unit unit in crownUnits)
@@ -89,7 +97,8 @@ public class Tree : MonoBehaviour
             }
         }
 
-        DebugAttractors(attractors);
+        if (debugAttractors)
+            DebugAttractors(attractors);
 
         BuildTree();
         EditorCoroutineUtility.StartCoroutine(RenderTree(), this);
@@ -153,7 +162,10 @@ public class Tree : MonoBehaviour
                 node.influencingAttractors.Clear();
             }
             if (nodes.Count == nodesCount)
+            {
+                Debug.LogWarning("Tree could not be created, parameters should be ajusted.");
                 break;
+            }
 
             for (int i = attractors.Count - 1; i >= 0; i--)
             {
@@ -290,6 +302,7 @@ public class Tree : MonoBehaviour
         return ring;
     }
 
+    public bool debugAttractors;
     public GameObject debugObj;
     private void DebugAttractors(List<Attractor> attractors)
     {

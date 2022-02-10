@@ -73,11 +73,10 @@ public class SceneManager : MonoBehaviour
 
         //Vector3 floodStartPos = levelBounds.center + Vector3.up * (size.y/2f - halfUnitSize);
         Vector3 floodStartPos = levelBounds.max - halfUnitSizeVec;
-        print(floodStartPos);
         FloodFill(floodStartPos);
 
-        Tree[] childTrees = transform.GetComponentsInChildren<Tree>();
-        foreach(Tree t in childTrees)
+        AdaptableTree[] childTrees = transform.GetComponentsInChildren<AdaptableTree>();
+        foreach(AdaptableTree t in childTrees)
         {
             t.getFreeUnits = GetFreeUnitsFloodFill;
         }
@@ -143,7 +142,7 @@ public class SceneManager : MonoBehaviour
         float halfUnitSize = unitSize / 2f;
         GameObject go = new GameObject("Tree");
         go.transform.SetParent(transform);
-        Tree tree = go.AddComponent<Tree>();
+        AdaptableTree tree = go.AddComponent<AdaptableTree>();
         tree.Init(position, GetFreeUnitsFloodFill, treeMaterial, treeSize, treeHeight, nodeKillDistance, 
             nodeAttractionDistance, nodeSegmentLength, attractorsAmount, treeTubeVertexAmount,
             treeBaseThickness, treeStepThickness, treeMaxDiffThickness, unitSize / 2f);
