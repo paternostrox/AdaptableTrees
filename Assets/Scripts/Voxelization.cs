@@ -149,21 +149,43 @@ public class Voxelization : MonoBehaviour
         tree.TreeRegen();
     }
 
-    public Unit[] GetFreeUnitsFloodFill(Vector3 position, Vector3 treeSize)
+    public Unit[] GetFreeUnitsFloodFill(Vector3 position, CloudShapeData shapeData)
     {
-        List<Unit> freeUnits = new List<Unit>();
+        Unit[] freeUnits = null;
+        switch (shapeData.cloudShape)
+        {
+            case PointCloudShape.Cuboid:
+                freeUnits = GetFreeUnitsCuboid(position, shapeData.cuboidSize);
+                break;
+            case PointCloudShape.Ellipsoid:
+                freeUnits = GetFreeUnitsEllipsoid(position, shapeData.ellipsoidParams);
+                break;
+        }
 
+
+        return freeUnits;
+    }
+
+    public Unit[] GetFreeUnitsEllipsoid(Vector3 position, EllipsoidParams ellipsoidParams)
+    {
         bool[] visitedTable = new bool[Mathf.RoundToInt(size.x * size.y * size.z / Mathf.Pow(unitSize, 3))];
         Queue<Vector3> toFill = new Queue<Vector3>();
+        Vector3 bottomCenter = position - Vector3.up * ((treeSize.y / 2) - halfUnitSizeVec.y);
+        toFill.Enqueue(bottomCenter);
 
+        List<Unit> freeUnits = new List<Unit>();
+        return null;
+    }
+
+    public Unit[] GetFreeUnitsCuboid(Vector3 position, Vector3 treeSize)
+    {
+        bool[] visitedTable = new bool[Mathf.RoundToInt(size.x * size.y * size.z / Mathf.Pow(unitSize, 3))];
+        Queue<Vector3> toFill = new Queue<Vector3>();
         Vector3 bottomCenter = position - Vector3.up * ((treeSize.y / 2) - halfUnitSizeVec.y);
         toFill.Enqueue(bottomCenter);
 
         Bounds treeBounds = new Bounds(position, treeSize);
-
-        if (useCustomVolume)
-            treeGenVolume.transform.position = position;
-
+        List<Unit> freeUnits = new List<Unit>();
 
         while (toFill.Count > 0)
         {
@@ -192,7 +214,7 @@ public class Voxelization : MonoBehaviour
             toFill.Enqueue(currPos + unitSize * Vector3.back);
         }
 
-        return freeUnits.ToArray();
+        return freeUnits;
     }
 
     public Unit[] GetFreeUnits(Vector3 position, Vector3 halfExtents)
