@@ -13,7 +13,7 @@ public class AdaptableTree : MonoBehaviour
 {
     public bool showCrown = false;
 
-    public Vector3 size;
+    public PointCloudData pointCloudData;
     public float height;
     public float killDistance;
     public float attractionDistance;
@@ -36,7 +36,9 @@ public class AdaptableTree : MonoBehaviour
 
     Unit[] crownUnits;
     float timer;
+    [HideInInspector]
     public Voxelization voxelization;
+
 
     GameObject builderBasis;
 
@@ -74,11 +76,11 @@ public class AdaptableTree : MonoBehaviour
         nodes.Add(new Node(null, transform.position));
 
         // Populate tree crown with attractors
-        crownUnits = voxelization.GetFreeUnitsFloodFill(transform.position + Vector3.up * height, size);
+        crownUnits = voxelization.GetFreeUnitsFloodFill(transform.position + Vector3.up * height, pointCloudData);
         int amountPerUnit = Mathf.CeilToInt(((float)attractorsAmount) / crownUnits.Length);
 
         // Add trunk attractors
-        for (float h = killDistance / 8f; h < height - size.y / 2f + unitHalfSize; h += killDistance / 8f)
+        for (float h = killDistance / 8f; h < height + unitHalfSize; h += killDistance / 8f)
         {
             Attractor attractor = new Attractor(transform.position + Vector3.up * h);
             attractors.Add(attractor);
@@ -105,8 +107,8 @@ public class AdaptableTree : MonoBehaviour
         EditorCoroutineUtility.StartCoroutine(RenderTree(), this);
     }
 
-    public void Init(Voxelization voxelization, Vector3 position, Material material,
-        Vector3 size, float height, float killDistance, float attractionDistance, 
+    public void Init(Voxelization voxelization, Vector3 position, PointCloudData pointCloudData, Material material,
+        float height, float killDistance, float attractionDistance, 
         float segmentLength, int attractorsAmount, bool abortCollidingBranches, 
         int tubeVertexAmount, float tubeRadius, float stepThickness, float maxDiffThickness, float unitHalfSize)
     {
@@ -119,9 +121,9 @@ public class AdaptableTree : MonoBehaviour
         // Attributions
         this.voxelization = voxelization;
         transform.position = position;
+        this.pointCloudData = pointCloudData;
         meshRenderer.material = material;
 
-        this.size = size;
         this.height = height;
         this.killDistance = killDistance;
         this.attractionDistance = attractionDistance;
@@ -312,9 +314,10 @@ public class AdaptableTree : MonoBehaviour
     }
 
     public bool debugAttractors;
-    public GameObject debugObj;
+    GameObject debugObj;
     private void DebugAttractors(List<Attractor> attractors)
     {
+        debugObj = Resources.Load<GameObject>("DebugObj");
         GameObject g = new GameObject("Debug");
         foreach (Attractor a in attractors)
         {

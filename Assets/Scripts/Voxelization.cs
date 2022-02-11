@@ -24,7 +24,7 @@ public class Voxelization : MonoBehaviour
 
     public int treeTubeVertexAmount = 5;
     public float treeHeight = 10f;
-    public Vector3 treeSize = Vector3.one;
+    public PointCloudData pointCloudData;
     public bool abortCollidingBranches = true;
 
     public float nodeKillDistance = .2f;
@@ -35,6 +35,7 @@ public class Voxelization : MonoBehaviour
     public float treeStepThickness = .2f;
     public float treeMaxDiffThickness = .6f;
     public Material treeMaterial;
+
 
     public bool useCustomVolume = false;
     [HideInInspector]
@@ -143,13 +144,14 @@ public class Voxelization : MonoBehaviour
         GameObject go = new GameObject("Tree");
         go.transform.SetParent(transform);
         AdaptableTree tree = go.AddComponent<AdaptableTree>();
-        tree.Init(this, position, treeMaterial, treeSize, treeHeight, nodeKillDistance, 
+        tree.Init(this, position, pointCloudData, treeMaterial, treeHeight, nodeKillDistance, 
             nodeAttractionDistance, nodeSegmentLength, attractorsAmount, abortCollidingBranches, 
             treeTubeVertexAmount, treeBaseThickness, treeStepThickness, treeMaxDiffThickness, unitSize / 2f);
         tree.TreeRegen();
     }
 
-    public Unit[] GetFreeUnitsFloodFill(Vector3 position, CloudShapeData shapeData)
+    // Note: 'position' is the position of trunk highest point
+    public Unit[] GetFreeUnitsFloodFill(Vector3 position, PointCloudData shapeData)
     {
         Unit[] freeUnits = null;
         switch (shapeData.cloudShape)
@@ -170,36 +172,23 @@ public class Voxelization : MonoBehaviour
     {
         bool[] visitedTable = new bool[Mathf.RoundToInt(size.x * size.y * size.z / Mathf.Pow(unitSize, 3))];
         Queue<Vector3> toFill = new Queue<Vector3>();
-        Vector3 bottomCenter = position - Vector3.up * ((treeSize.y / 2) - halfUnitSizeVec.y);
+        Vector3 bottomCenter = position + Vector3.up * halfUnitSizeVec.y;
         toFill.Enqueue(bottomCenter);
 
-        List<Unit> freeUnits = new List<Unit>();
-        return null;
-    }
+        Vector3 ellipsoidCenter = position + Vector3.up * ellipsoidParams.b;
 
-    public Unit[] GetFreeUnitsCuboid(Vector3 position, Vector3 treeSize)
-    {
-        bool[] visitedTable = new bool[Mathf.RoundToInt(size.x * size.y * size.z / Mathf.Pow(unitSize, 3))];
-        Queue<Vector3> toFill = new Queue<Vector3>();
-        Vector3 bottomCenter = position - Vector3.up * ((treeSize.y / 2) - halfUnitSizeVec.y);
-        toFill.Enqueue(bottomCenter);
-
-        Bounds treeBounds = new Bounds(position, treeSize);
         List<Unit> freeUnits = new List<Unit>();
 
-        while (toFill.Count > 0)
+        while(toFill.Count > 0)
         {
             Vector3 currPos = toFill.Dequeue();
 
-            if (!treeBounds.Contains(currPos) || !levelBounds.Contains(currPos))
-                continue;
-
-            if (visitedTable[WorldToGrid(currPos)])
+            if (!isInsideEllipsoid(currPos, ellipsoidCenter, ellipsoidParams) || !levelBounds.Contains(currPos) || visitedTable[WorldToGrid(currPos)])
                 continue;
 
             visitedTable[WorldToGrid(currPos)] = true;
 
-            Unit unit = units[WorldToGrid(currPos)];
+            Unit unit = GetUnit(currPos);
 
             if (unit.occupied)
                 continue;
@@ -214,7 +203,55 @@ public class Voxelization : MonoBehaviour
             toFill.Enqueue(currPos + unitSize * Vector3.back);
         }
 
-        return freeUnits;
+        return freeUnits.ToArray();
+    }
+
+    public Unit[] GetFreeUnitsCuboid(Vector3 position, Vector3 treeSize)
+    {
+        bool[] visitedTable = new bool[Mathf.RoundToInt(size.x * size.y * size.z / Mathf.Pow(unitSize, 3))];
+        Queue<Vector3> toFill = new Queue<Vector3>();
+        Vector3 bottomCenter = position + Vector3.up * halfUnitSizeVec.y;
+        toFill.Enqueue(bottomCenter);
+
+        Vector3 center = position + Vector3.up * (treeSize.y / 2f);
+        Bounds treeBounds = new Bounds(center, treeSize);
+        List<Unit> freeUnits = new List<Unit>();
+
+        while (toFill.Count > 0)
+        {
+            Vector3 currPos = toFill.Dequeue();
+
+            if (!treeBounds.Contains(currPos) || !levelBounds.Contains(currPos) || visitedTable[WorldToGrid(currPos)])
+                continue;
+
+            visitedTable[WorldToGrid(currPos)] = true;
+
+            Unit unit = GetUnit(currPos);
+
+            if (unit.occupied)
+                continue;
+
+            freeUnits.Add(unit);
+
+            toFill.Enqueue(currPos + unitSize * Vector3.right);
+            toFill.Enqueue(currPos + unitSize * Vector3.left);
+            toFill.Enqueue(currPos + unitSize * Vector3.up);
+            toFill.Enqueue(currPos + unitSize * Vector3.down);
+            toFill.Enqueue(currPos + unitSize * Vector3.forward);
+            toFill.Enqueue(currPos + unitSize * Vector3.back);
+        }
+
+        return freeUnits.ToArray();
+    }
+
+    // Position arg should be (worldPos - ellipsoidCenter)
+    public bool isInsideEllipsoid(Vector3 position, Vector3 ellipsoidCenter, EllipsoidParams ellipsoidParams)
+    {
+        Vector3 checkPosition = position - ellipsoidCenter;
+        float ratioX = (checkPosition.x * checkPosition.x) / (ellipsoidParams.a * ellipsoidParams.a);
+        float ratioY = (checkPosition.y * checkPosition.y) / (ellipsoidParams.b * ellipsoidParams.b);
+        float ratioZ = (checkPosition.z * checkPosition.z) / (ellipsoidParams.c * ellipsoidParams.c);
+        return ratioX + ratioY + ratioZ <= 1;
     }
 
     public Unit[] GetFreeUnits(Vector3 position, Vector3 halfExtents)
@@ -231,7 +268,7 @@ public class Voxelization : MonoBehaviour
                 for (float k = -halfExtents.z; k < halfExtents.z; k += unitSize)
                 {
                     Vector3 fixedPos = position + new Vector3(i, j, k);
-                    Unit unit = units[WorldToGrid(fixedPos)];
+                    Unit unit = GetUnit(fixedPos);
                     if(!unit.occupied)
                     {
                         if(useCustomVolume)

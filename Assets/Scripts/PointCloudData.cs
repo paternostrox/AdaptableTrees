@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class CloudShapeData
+public struct PointCloudData
 {
     public PointCloudShape cloudShape;
 
@@ -23,5 +23,5 @@ public class CloudShapeData
 [System.Serializable]
 public struct EllipsoidParams
 {
-    public float xWarp, yWarp, zWarp;
+    public float a, b, c;
 }
