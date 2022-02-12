@@ -159,6 +159,9 @@ public class Voxelization : MonoBehaviour
             case PointCloudShape.Cuboid:
                 freeUnits = GetFreeUnitsCuboid(position, shapeData.cuboidSize);
                 break;
+            case PointCloudShape.Sphere:
+                freeUnits = GetFreeUnitsSphere(position, shapeData.sphereRadius);
+                break;
             case PointCloudShape.Ellipsoid:
                 freeUnits = GetFreeUnitsEllipsoid(position, shapeData.ellipsoidParams);
                 break;
@@ -166,6 +169,44 @@ public class Voxelization : MonoBehaviour
 
 
         return freeUnits;
+    }
+
+    public Unit[] GetFreeUnitsSphere(Vector3 position, float radius)
+    {
+        bool[] visitedTable = new bool[Mathf.RoundToInt(size.x * size.y * size.z / Mathf.Pow(unitSize, 3))];
+        Queue<Vector3> toFill = new Queue<Vector3>();
+        Vector3 bottomCenter = position + Vector3.up * halfUnitSizeVec.y;
+        toFill.Enqueue(bottomCenter);
+
+        Vector3 sphereCenter = position + Vector3.up * radius;
+
+        List<Unit> freeUnits = new List<Unit>();
+
+        while (toFill.Count > 0)
+        {
+            Vector3 currPos = toFill.Dequeue();
+
+            if (!isInsideSphere(currPos, sphereCenter, radius) || !levelBounds.Contains(currPos) || visitedTable[WorldToGrid(currPos)])
+                continue;
+
+            visitedTable[WorldToGrid(currPos)] = true;
+
+            Unit unit = GetUnit(currPos);
+
+            if (unit.occupied)
+                continue;
+
+            freeUnits.Add(unit);
+
+            toFill.Enqueue(currPos + unitSize * Vector3.right);
+            toFill.Enqueue(currPos + unitSize * Vector3.left);
+            toFill.Enqueue(currPos + unitSize * Vector3.up);
+            toFill.Enqueue(currPos + unitSize * Vector3.down);
+            toFill.Enqueue(currPos + unitSize * Vector3.forward);
+            toFill.Enqueue(currPos + unitSize * Vector3.back);
+        }
+
+        return freeUnits.ToArray();
     }
 
     public Unit[] GetFreeUnitsEllipsoid(Vector3 position, EllipsoidParams ellipsoidParams)
@@ -244,7 +285,12 @@ public class Voxelization : MonoBehaviour
         return freeUnits.ToArray();
     }
 
-    // Position arg should be (worldPos - ellipsoidCenter)
+    public bool isInsideSphere(Vector3 position, Vector3 sphereCenter, float radius)
+    {
+        Vector3 checkPosition = position - sphereCenter;
+        return checkPosition.x * checkPosition.x + checkPosition.y * checkPosition.y + checkPosition.z * checkPosition.z <= radius * radius;
+    }
+
     public bool isInsideEllipsoid(Vector3 position, Vector3 ellipsoidCenter, EllipsoidParams ellipsoidParams)
     {
         Vector3 checkPosition = position - ellipsoidCenter;
