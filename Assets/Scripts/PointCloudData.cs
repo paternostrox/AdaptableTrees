@@ -6,8 +6,8 @@ public struct PointCloudData
 {
     public PointCloudShape cloudShape;
 
-    // For cuboid
-    public Vector3 cuboidSize;
+    // For cuboid (box)
+    public Vector3 boxSize;
 
     // For sphere
     public float sphereRadius;

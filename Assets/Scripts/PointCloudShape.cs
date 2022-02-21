@@ -3,9 +3,9 @@ using UnityEngine;
 
 public enum PointCloudShape
 {
-    Cuboid,
+    Box,
     Sphere,
+    HalfSphere,
     Ellipsoid,
-    WaterDrop,
-    Custom
+    HalfEllipsoid
 }

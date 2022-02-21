@@ -8,8 +8,9 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class Voxelization : MonoBehaviour
 {
-    [SerializeField] Vector3Int size;
-    [SerializeField] float unitSize = 1;
+    [HideInInspector] public Vector3Int size;
+    [HideInInspector] public float unitSize = 1;
+    [HideInInspector] public Vector3 floodStartPos;
     Bounds levelBounds;
     Vector3 halfUnitSizeVec;
     Vector3 offset;
@@ -17,26 +18,26 @@ public class Voxelization : MonoBehaviour
     Color freeColor = new Color(0,1,0,.4f);
     Color occupiedColor = new Color(1,0,0,.4f);
 
-    public bool showOccupied = true;
-    public bool showFree = false;
+    [HideInInspector] public bool showOccupied = true;
+    [HideInInspector] public bool showFree = false;
 
-    public Unit[] units;
+    private Unit[] units;
 
-    public int treeTubeVertexAmount = 5;
-    public float treeHeight = 10f;
+    [HideInInspector] public int treeTubeVertexAmount = 5;
+    [HideInInspector] public float treeHeight = 10f;
     public PointCloudData pointCloudData;
-    public bool abortCollidingBranches = true;
+    [HideInInspector] public bool abortCollidingBranches = true;
 
-    public float nodeKillDistance = .2f;
-    public float nodeAttractionDistance = 10f;
-    public float nodeSegmentLength = .1f;
-    public int attractorsAmount = 100;
-    public float treeBaseThickness = .05f;
-    public float treeStepThickness = .2f;
-    public float treeMaxDiffThickness = .6f;
-    public Material treeMaterial;
+    [HideInInspector] public float nodeKillDistance = .2f;
+    [HideInInspector] public float nodeAttractionDistance = 10f;
+    [HideInInspector] public float nodeSegmentLength = .1f;
+    [HideInInspector] public int attractorsAmount = 100;
+    [HideInInspector] public float treeBaseThickness = .05f;
+    [HideInInspector] public float treeStepThickness = .2f;
+    [HideInInspector] public float treeMaxDiffThickness = .6f;
+    [HideInInspector] public Material treeMaterial;
 
-
+    [HideInInspector]
     public bool useCustomVolume = false;
     [HideInInspector]
     public GameObject treeGenVolume;
@@ -73,7 +74,7 @@ public class Voxelization : MonoBehaviour
         }
 
         //Vector3 floodStartPos = levelBounds.center + Vector3.up * (size.y/2f - halfUnitSize);
-        Vector3 floodStartPos = levelBounds.max - halfUnitSizeVec;
+        //Vector3 floodStartPos = levelBounds.max - halfUnitSizeVec;
         FloodFill(floodStartPos);
 
         AdaptableTree[] childTrees = transform.GetComponentsInChildren<AdaptableTree>();
@@ -156,8 +157,8 @@ public class Voxelization : MonoBehaviour
         Unit[] freeUnits = null;
         switch (shapeData.cloudShape)
         {
-            case PointCloudShape.Cuboid:
-                freeUnits = GetFreeUnitsCuboid(position, shapeData.cuboidSize);
+            case PointCloudShape.Box:
+                freeUnits = GetFreeUnitsCuboid(position, shapeData.boxSize);
                 break;
             case PointCloudShape.Sphere:
                 freeUnits = GetFreeUnitsSphere(position, shapeData.sphereRadius);

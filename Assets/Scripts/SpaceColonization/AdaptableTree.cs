@@ -103,8 +103,8 @@ public class AdaptableTree : MonoBehaviour
         if (debugAttractors)
             DebugAttractors(attractors);
 
-        BuildTree();
-        EditorCoroutineUtility.StartCoroutine(RenderTree(), this);
+        BuildStructure();
+        EditorCoroutineUtility.StartCoroutine(BuildGeometry(), this);
     }
 
     public void Init(Voxelization voxelization, Vector3 position, PointCloudData pointCloudData, Material material,
@@ -139,7 +139,7 @@ public class AdaptableTree : MonoBehaviour
         unitVec = Vector3.one * unitHalfSize * 2f;
     }
 
-    public void BuildTree()
+    public void BuildStructure()
     {
         timer = Time.time;
         while (attractors.Count > 0)
@@ -163,7 +163,7 @@ public class AdaptableTree : MonoBehaviour
                     Vector3 nextPosition = node.position + node.GetAverageDirection() * segmentLength;
 
                     // NOT IDEAL, BUT WORKS!!! :)
-                    if (abortCollidingBranches && voxelization.GetUnit(nextPosition).occupied)
+                    if (abortCollidingBranches && voxelization.GetUnit(nextPosition).occupied && i>6)
                         continue;
 
                     Node nextNode = new Node(node, nextPosition);
@@ -208,13 +208,15 @@ public class AdaptableTree : MonoBehaviour
         Debug.Log("Build time is: " + (Time.time - timer) + "seconds.");
     }
 
-    public IEnumerator RenderTree()
+    public IEnumerator BuildGeometry()
     {
         timer = Time.time;
         for (int i = 0; i < nodes.Count; i++)
         {
             Node node = nodes[i];
             AddTube(node, node.parent);
+            if (node.isTip)
+                AddTip(node, node.parent);
             yield return null;
         }
         Debug.Log("Render time is: " + (Time.time - timer) + "seconds.");
@@ -240,6 +242,57 @@ public class AdaptableTree : MonoBehaviour
             }
         }
         return minDistNode;
+    }
+
+    public void AddTip(Node node, Node parent)
+    {
+
+        Mesh mesh = meshFilter.sharedMesh;
+        Mesh newMesh = new Mesh();
+        int verticesAmount = mesh.vertices.Length;
+        int trianglesAmount = mesh.triangles.Length;
+
+        // Create arrays to accomodate old geometry + new tip
+        Vector3[] vertices = new Vector3[verticesAmount + tubeVertexAmount * 3];
+        Vector2[] uv = new Vector2[verticesAmount + tubeVertexAmount * 3];
+        int[] triangles = new int[trianglesAmount + tubeVertexAmount * 3];
+        Vector3[] normals = new Vector3[verticesAmount + tubeVertexAmount * 3];
+
+        // Copy old geometry to arrays
+        mesh.vertices.CopyTo(vertices, 0);
+        mesh.uv.CopyTo(uv, 0);
+        mesh.triangles.CopyTo(triangles, 0);
+        mesh.normals.CopyTo(normals, 0);
+
+        // Creates new tip and adds it to arrays
+        Vector3[] bottomRing = GetRing(node.position, node.directionFromParent, baseThickness * node.thickness);
+        Vector3 tipVertex = GetTip(node.position, node.directionFromParent);
+
+        for (int leftEdge = 0; leftEdge < tubeVertexAmount; leftEdge++)
+        {
+            int rightEdge = (leftEdge + 1) % tubeVertexAmount;
+            Vector3[] verts = { bottomRing[leftEdge], tipVertex, bottomRing[rightEdge] };
+            Vector2[] uvs = { Vector2.zero, Vector2.one, Vector2.right };
+            int[] tris = { verticesAmount, verticesAmount+1, verticesAmount+2 };
+            Vector3 v1 = bottomRing[rightEdge] - bottomRing[leftEdge];
+            Vector3 v2 = tipVertex - bottomRing[leftEdge];
+            Vector3 faceNormal = Vector3.Cross(v1, v2);
+            Vector3[] norms = { faceNormal, faceNormal, faceNormal };
+
+            verts.CopyTo(vertices, verticesAmount);
+            uvs.CopyTo(uv, verticesAmount);
+            tris.CopyTo(triangles, trianglesAmount);
+            norms.CopyTo(normals, verticesAmount);
+
+            verticesAmount += 3;
+            trianglesAmount += 3;
+        }
+
+        newMesh.vertices = vertices;
+        newMesh.uv = uv;
+        newMesh.triangles = triangles;
+        newMesh.normals = normals;
+        meshFilter.mesh = newMesh;
     }
 
     public void AddTube(Node node, Node parent)
@@ -311,6 +364,13 @@ public class AdaptableTree : MonoBehaviour
             ring[i] = vertexPos;
         }
         return ring;
+    }
+
+    public Vector3 GetTip(Vector3 pos, Vector3 localUp)
+    {
+        builderBasis.transform.rotation = Quaternion.FromToRotation(Vector3.up, localUp);
+        Vector3 vertexPos = transform.InverseTransformPoint(pos) + localUp / 2f;
+        return vertexPos;
     }
 
     public bool debugAttractors;
