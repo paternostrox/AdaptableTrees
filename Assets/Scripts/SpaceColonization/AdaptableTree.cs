@@ -78,7 +78,8 @@ public class AdaptableTree : MonoBehaviour
         GenerateAttractors();
 
         BuildStructure();
-        EditorCoroutineUtility.StartCoroutine(BuildGeometry(), this);
+        BuildGeometrySync();
+        //EditorCoroutineUtility.StartCoroutine(BuildGeometryAsync(), this);
     }
 
     public void Init(Voxelization voxelization, Vector3 position, PointCloudData pointCloudData, Material material,
@@ -126,25 +127,25 @@ public class AdaptableTree : MonoBehaviour
         }
 
         // Add crown attractors
-        for(int i = 0; i < attractorsAmount; i++)
-        {
-            int randomUnitIndex = Random.Range(0, crownUnits.Length);
-            Vector3 attractorPos = crownUnits[randomUnitIndex].position + new Vector3(Random.Range(-unitHalfSize, unitHalfSize),
-                    Random.Range(-unitHalfSize, unitHalfSize), Random.Range(-unitHalfSize, unitHalfSize));
-            Attractor attractor = new Attractor(attractorPos);
-        }
-
-        //int amountPerUnit = Mathf.CeilToInt(((float)attractorsAmount) / crownUnits.Length);
-        //foreach (Unit unit in crownUnits)
+        //for(int i = 0; i < attractorsAmount; i++)
         //{
-        //    for (int i = 0; i < amountPerUnit; i++)
-        //    {
-        //        Vector3 attractorPos = unit.position + new Vector3(Random.Range(-unitHalfSize, unitHalfSize),
+        //    int randomUnitIndex = Random.Range(0, crownUnits.Length);
+        //    Vector3 attractorPos = crownUnits[randomUnitIndex].position + new Vector3(Random.Range(-unitHalfSize, unitHalfSize),
         //            Random.Range(-unitHalfSize, unitHalfSize), Random.Range(-unitHalfSize, unitHalfSize));
-        //        Attractor attractor = new Attractor(attractorPos);
-        //        attractors.Add(attractor);
-        //    }
+        //    Attractor attractor = new Attractor(attractorPos);
         //}
+
+        int amountPerUnit = Mathf.CeilToInt(((float)attractorsAmount) / crownUnits.Length);
+        foreach (Unit unit in crownUnits)
+        {
+            for (int i = 0; i < amountPerUnit; i++)
+            {
+                Vector3 attractorPos = unit.position + new Vector3(Random.Range(-unitHalfSize, unitHalfSize),
+                    Random.Range(-unitHalfSize, unitHalfSize), Random.Range(-unitHalfSize, unitHalfSize));
+                Attractor attractor = new Attractor(attractorPos);
+                attractors.Add(attractor);
+            }
+        }
 
         if (debugAttractors)
             DebugAttractors(attractors);
@@ -185,7 +186,7 @@ public class AdaptableTree : MonoBehaviour
             }
             if (nodes.Count == nodesCount)
             {
-                Debug.LogWarning("Tree could not be created, parameters should be ajusted.");
+                Debug.LogWarning("Not every attraction points was terminated, maybe parameters should be ajusted.");
                 break;
             }
 
@@ -219,7 +220,7 @@ public class AdaptableTree : MonoBehaviour
         Debug.Log("Structure creation time is: " + (Time.realtimeSinceStartup - timer) + "seconds.");
     }
 
-    public IEnumerator BuildGeometry()
+    public IEnumerator BuildGeometryAsync()
     {
         timer = Time.realtimeSinceStartup;
         for (int i = 0; i < nodes.Count; i++)
@@ -230,6 +231,97 @@ public class AdaptableTree : MonoBehaviour
                 AddTip(node, node.parent);
             yield return null;
         }
+        Debug.Log("Geometry creation time is: " + (Time.realtimeSinceStartup - timer) + "seconds.");
+    }
+
+    public void BuildGeometrySync()
+    {
+        timer = Time.realtimeSinceStartup;
+
+        Mesh newMesh = new Mesh();
+        int tubeAmount = nodes.Count - 1;
+        int tipAmount = 0;
+
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            Node node = nodes[i];
+            if (node.isTip)
+                tipAmount++;
+        }
+
+        Vector3[] vertices = new Vector3[tubeAmount * tubeVertexAmount * 4 + tipAmount * tubeVertexAmount * 3];
+        Vector2[] uv = new Vector2[tubeAmount * tubeVertexAmount * 4 + tipAmount * tubeVertexAmount * 3];
+        int[] triangles = new int[tubeAmount * tubeVertexAmount * 6 + tipAmount * tubeVertexAmount * 3];
+        Vector3[] normals = new Vector3[tubeAmount * tubeVertexAmount * 4 + tipAmount * tubeVertexAmount * 3];
+
+        int verticesAmount = 0;
+        int trianglesAmount = 0;
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            Node node = nodes[i];
+
+            if (node.parent == null)
+                continue;
+
+            // Creates new tube and adds it to arrays
+            Vector3[] bottomRing = GetRing(node.parent.position, node.parent.directionFromParent, baseThickness * node.parent.thickness);
+            Vector3[] topRing = GetRing(node.position, node.directionFromParent, baseThickness * node.thickness);
+
+            for (int leftEdge = 0; leftEdge < tubeVertexAmount; leftEdge++)
+            {
+                int rightEdge = (leftEdge + 1) % tubeVertexAmount;
+                Vector3[] verts = { bottomRing[leftEdge], topRing[leftEdge], topRing[rightEdge], bottomRing[rightEdge] };
+                Vector2[] uvs = { Vector2.zero, Vector2.up, Vector2.one, Vector2.right };
+                int[] tris = { verticesAmount, verticesAmount+1, verticesAmount+3,
+                    verticesAmount+1, verticesAmount+2, verticesAmount+3 };
+                Vector3 v1 = bottomRing[rightEdge] - bottomRing[leftEdge];
+                Vector3 v2 = topRing[leftEdge] - bottomRing[leftEdge];
+                Vector3 faceNormal = Vector3.Cross(v1, v2);
+                Vector3[] norms = { faceNormal, faceNormal, faceNormal, faceNormal };
+
+                verts.CopyTo(vertices, verticesAmount);
+                uvs.CopyTo(uv, verticesAmount);
+                tris.CopyTo(triangles, trianglesAmount);
+                norms.CopyTo(normals, verticesAmount);
+
+                verticesAmount += 4;
+                trianglesAmount += 6;
+            }
+
+            if(node.isTip)
+            {
+                // Creates new tip and adds it to arrays
+                bottomRing = topRing;
+                Vector3 tipVertex = GetTip(node.position, node.directionFromParent);
+
+                for (int leftEdge = 0; leftEdge < tubeVertexAmount; leftEdge++)
+                {
+                    int rightEdge = (leftEdge + 1) % tubeVertexAmount;
+                    Vector3[] verts = { bottomRing[leftEdge], tipVertex, bottomRing[rightEdge] };
+                    Vector2[] uvs = { Vector2.zero, Vector2.one, Vector2.right };
+                    int[] tris = { verticesAmount, verticesAmount + 1, verticesAmount + 2 };
+                    Vector3 v1 = bottomRing[rightEdge] - bottomRing[leftEdge];
+                    Vector3 v2 = tipVertex - bottomRing[leftEdge];
+                    Vector3 faceNormal = Vector3.Cross(v1, v2);
+                    Vector3[] norms = { faceNormal, faceNormal, faceNormal };
+
+                    verts.CopyTo(vertices, verticesAmount);
+                    uvs.CopyTo(uv, verticesAmount);
+                    tris.CopyTo(triangles, trianglesAmount);
+                    norms.CopyTo(normals, verticesAmount);
+
+                    verticesAmount += 3;
+                    trianglesAmount += 3;
+                }
+            }
+        }
+
+        newMesh.vertices = vertices;
+        newMesh.uv = uv;
+        newMesh.triangles = triangles;
+        newMesh.normals = normals;
+        meshFilter.mesh = newMesh;
+
         Debug.Log("Geometry creation time is: " + (Time.realtimeSinceStartup - timer) + "seconds.");
     }
 

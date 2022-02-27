@@ -122,7 +122,6 @@ public class Voxelization : MonoBehaviour
         Event e = Event.current;
         if (e.type == EventType.MouseDown && e.button == 0)
         {
-            print("LEFT CLICK IDNTF");
             RaycastHit hit;
             Ray ray = HandleUtility.GUIPointToWorldRay(e.mousePosition);
             if(Physics.Raycast(ray, out hit))

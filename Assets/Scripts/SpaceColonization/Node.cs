@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +10,6 @@ public class Node
     public List<Attractor> influencingAttractors = new List<Attractor>();
     public bool isTip = true; // For thickening
     public float thickness = 1f;
-    System.Random random;
 
     // jitter to avoid getting stuck
     static float jitterAmount = .05f;
@@ -22,8 +20,6 @@ public class Node
         this.position = position;
         if (parent != null)
             directionFromParent = position - parent.position;
-
-        random = new System.Random();
     }
 
     public Vector3 GetAverageDirection()
@@ -35,7 +31,7 @@ public class Node
             averageDirection += (a.position - position).normalized;
         }
         // add jitter to avoid getting stuck
-        Vector3 jitter = new Vector3(random.NextFloatRange(-jitterAmount, jitterAmount), random.NextFloatRange(-jitterAmount, jitterAmount), random.NextFloatRange(-jitterAmount, jitterAmount));
+        Vector3 jitter = new Vector3(Random.Range(-jitterAmount, jitterAmount), Random.Range(-jitterAmount, jitterAmount), Random.Range(-jitterAmount, jitterAmount));
         Debug.Log("Jitter: " + jitter);
         averageDirection += jitter;
 
