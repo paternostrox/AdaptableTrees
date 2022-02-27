@@ -8,16 +8,18 @@ public class VoxelizationEditor : Editor
 {
     private bool buildTrees = false;
 
+    bool foldout = true;
+
     public override void OnInspectorGUI()
     {
-        GUIStyle labelStyle = new GUIStyle(GUI.skin.label);
+        //GUIStyle labelStyle = new GUIStyle(GUI.skin.label);
         //labelStyle.alignment = TextAnchor.MiddleCenter;
 
         Voxelization sceneManager = (Voxelization)target;
 
         // AMBIENT
 
-        GUILayout.Label("Voxelization Settings", labelStyle);
+        GUILayout.Label("Voxelization Settings");
 
         sceneManager.size = EditorGUILayout.Vector3IntField("Size", sceneManager.size);
 
@@ -35,7 +37,7 @@ public class VoxelizationEditor : Editor
         }
 
         // TREE
-        GUILayout.Label("Tree Settings", labelStyle);
+        GUILayout.Label("Tree Settings");
 
         sceneManager.treeTubeVertexAmount = EditorGUILayout.IntField("Tube Vertex Amount", sceneManager.treeTubeVertexAmount);
 
@@ -51,13 +53,37 @@ public class VoxelizationEditor : Editor
 
         sceneManager.treeBaseThickness = EditorGUILayout.FloatField("Tree Base Thickness", sceneManager.treeBaseThickness);
 
-        sceneManager.treeStepThickness = EditorGUILayout.FloatField("Tree Step Thickness", sceneManager.treeStepThickness);
+        sceneManager.treePerChildThickness = EditorGUILayout.FloatField("Tree Per Child Thickness", sceneManager.treePerChildThickness);
 
         sceneManager.treeMaxDiffThickness = EditorGUILayout.FloatField("Tree Max Diff Thickness", sceneManager.treeMaxDiffThickness);
 
         sceneManager.treeMaterial = (Material)EditorGUILayout.ObjectField("Material", sceneManager.treeMaterial, typeof(Material));
 
-        DrawDefaultInspector();
+        foldout = EditorGUILayout.Foldout(foldout, "Point Cloud Data");
+
+        if(foldout)
+        {
+            var level = EditorGUI.indentLevel;
+            EditorGUI.indentLevel++;
+            sceneManager.pointCloudData.cloudShape = (PointCloudShape) EditorGUILayout.EnumPopup("Cloud Shape", sceneManager.pointCloudData.cloudShape);
+
+            if (sceneManager.pointCloudData.cloudShape == PointCloudShape.Box)
+                sceneManager.pointCloudData.boxSize = EditorGUILayout.Vector3Field("Box Size", sceneManager.pointCloudData.boxSize);
+            if (sceneManager.pointCloudData.cloudShape == PointCloudShape.Sphere || sceneManager.pointCloudData.cloudShape == PointCloudShape.HalfSphere)
+                sceneManager.pointCloudData.sphereRadius = EditorGUILayout.FloatField("Sphere Radius", sceneManager.pointCloudData.sphereRadius);
+            if (sceneManager.pointCloudData.cloudShape == PointCloudShape.Ellipsoid || sceneManager.pointCloudData.cloudShape == PointCloudShape.HalfEllipsoid)
+            {
+                sceneManager.pointCloudData.ellipsoidSize = EditorGUILayout.Vector3Field("Ellipsoid Size", sceneManager.pointCloudData.ellipsoidSize);
+                //GUILayout.Label("Ellipsoid Parameters");
+                //sceneManager.pointCloudData.ellipsoidParams.a = EditorGUILayout.FloatField("A", sceneManager.pointCloudData.ellipsoidParams.a);
+                //sceneManager.pointCloudData.ellipsoidParams.b = EditorGUILayout.FloatField("B", sceneManager.pointCloudData.ellipsoidParams.b);
+                //sceneManager.pointCloudData.ellipsoidParams.c = EditorGUILayout.FloatField("C", sceneManager.pointCloudData.ellipsoidParams.c);
+            }
+            EditorGUI.indentLevel = level;
+        }
+
+
+        //DrawDefaultInspector();
 
         if (!buildTrees)
         {

@@ -23,7 +23,7 @@ public class AdaptableTree : MonoBehaviour
 
     public int tubeVertexAmount;
     public float baseThickness;
-    public float stepThickness;
+    public float perChildThickness;
     public float maxDiffThickness;
     float unitHalfSize;
     Vector3 unitVec;
@@ -75,33 +75,7 @@ public class AdaptableTree : MonoBehaviour
         // Add root node
         nodes.Add(new Node(null, transform.position));
 
-        // Populate tree crown with attractors
-        crownUnits = voxelization.GetFreeUnitsFloodFill(transform.position + Vector3.up * height, pointCloudData);
-        int amountPerUnit = Mathf.CeilToInt(((float)attractorsAmount) / crownUnits.Length);
-
-        // Add trunk attractors
-        for (float h = killDistance / 8f; h < height + unitHalfSize; h += killDistance / 8f)
-        {
-            Attractor attractor = new Attractor(transform.position + Vector3.up * h);
-            attractors.Add(attractor);
-        }
-
-        // Random does not work on existing trees if code is changed
-
-        // Add crown attractors
-        foreach (Unit unit in crownUnits)
-        {
-            for (int i = 0; i < amountPerUnit; i++)
-            {
-                Vector3 attractorPos = unit.position + new Vector3(Random.Range(-unitHalfSize, unitHalfSize),
-                    Random.Range(-unitHalfSize, unitHalfSize), Random.Range(-unitHalfSize, unitHalfSize));
-                Attractor attractor = new Attractor(attractorPos);
-                attractors.Add(attractor);
-            }
-        }
-
-        if (debugAttractors)
-            DebugAttractors(attractors);
+        GenerateAttractors();
 
         BuildStructure();
         EditorCoroutineUtility.StartCoroutine(BuildGeometry(), this);
@@ -110,7 +84,7 @@ public class AdaptableTree : MonoBehaviour
     public void Init(Voxelization voxelization, Vector3 position, PointCloudData pointCloudData, Material material,
         float height, float killDistance, float attractionDistance, 
         float segmentLength, int attractorsAmount, bool abortCollidingBranches, 
-        int tubeVertexAmount, float tubeRadius, float stepThickness, float maxDiffThickness, float unitHalfSize)
+        int tubeVertexAmount, float tubeRadius, float perChildThickness, float maxDiffThickness, float unitHalfSize)
     {
         // INIT
         meshFilter = GetComponent<MeshFilter>();
@@ -132,16 +106,53 @@ public class AdaptableTree : MonoBehaviour
         this.abortCollidingBranches = abortCollidingBranches;
 
         this.baseThickness = tubeRadius;
-        this.stepThickness = stepThickness;
+        this.perChildThickness = perChildThickness;
         this.maxDiffThickness = maxDiffThickness;
         this.tubeVertexAmount = tubeVertexAmount;
         this.unitHalfSize = unitHalfSize;
         unitVec = Vector3.one * unitHalfSize * 2f;
     }
 
+    public void GenerateAttractors()
+    {
+        // Populate tree crown with attractors
+        crownUnits = voxelization.GetFreeUnitsFloodFill(transform.position + Vector3.up * height, pointCloudData);
+
+        // Add trunk attractors
+        for (float h = killDistance / 8f; h < height + unitHalfSize; h += killDistance / 8f)
+        {
+            Attractor attractor = new Attractor(transform.position + Vector3.up * h);
+            attractors.Add(attractor);
+        }
+
+        // Add crown attractors
+        for(int i = 0; i < attractorsAmount; i++)
+        {
+            int randomUnitIndex = Random.Range(0, crownUnits.Length);
+            Vector3 attractorPos = crownUnits[randomUnitIndex].position + new Vector3(Random.Range(-unitHalfSize, unitHalfSize),
+                    Random.Range(-unitHalfSize, unitHalfSize), Random.Range(-unitHalfSize, unitHalfSize));
+            Attractor attractor = new Attractor(attractorPos);
+        }
+
+        //int amountPerUnit = Mathf.CeilToInt(((float)attractorsAmount) / crownUnits.Length);
+        //foreach (Unit unit in crownUnits)
+        //{
+        //    for (int i = 0; i < amountPerUnit; i++)
+        //    {
+        //        Vector3 attractorPos = unit.position + new Vector3(Random.Range(-unitHalfSize, unitHalfSize),
+        //            Random.Range(-unitHalfSize, unitHalfSize), Random.Range(-unitHalfSize, unitHalfSize));
+        //        Attractor attractor = new Attractor(attractorPos);
+        //        attractors.Add(attractor);
+        //    }
+        //}
+
+        if (debugAttractors)
+            DebugAttractors(attractors);
+    }
+
     public void BuildStructure()
     {
-        timer = Time.time;
+        timer = Time.realtimeSinceStartup;
         while (attractors.Count > 0)
         {
             foreach (Attractor a in attractors)
@@ -198,19 +209,19 @@ public class AdaptableTree : MonoBehaviour
                 {
                     if (node.parent.thickness < node.thickness + maxDiffThickness)
                     {
-                        node.parent.thickness += stepThickness;
+                        node.parent.thickness += perChildThickness;
                     }
                     node = node.parent;
                 }
             }
         }
 
-        Debug.Log("Build time is: " + (Time.time - timer) + "seconds.");
+        Debug.Log("Structure creation time is: " + (Time.realtimeSinceStartup - timer) + "seconds.");
     }
 
     public IEnumerator BuildGeometry()
     {
-        timer = Time.time;
+        timer = Time.realtimeSinceStartup;
         for (int i = 0; i < nodes.Count; i++)
         {
             Node node = nodes[i];
@@ -219,7 +230,7 @@ public class AdaptableTree : MonoBehaviour
                 AddTip(node, node.parent);
             yield return null;
         }
-        Debug.Log("Render time is: " + (Time.time - timer) + "seconds.");
+        Debug.Log("Geometry creation time is: " + (Time.realtimeSinceStartup - timer) + "seconds.");
     }
 
     public Node GetClosestNode(Attractor attractor)

@@ -33,7 +33,7 @@ public class Voxelization : MonoBehaviour
     [HideInInspector] public float nodeSegmentLength = .1f;
     [HideInInspector] public int attractorsAmount = 100;
     [HideInInspector] public float treeBaseThickness = .05f;
-    [HideInInspector] public float treeStepThickness = .2f;
+    [HideInInspector] public float treePerChildThickness = .2f;
     [HideInInspector] public float treeMaxDiffThickness = .6f;
     [HideInInspector] public Material treeMaterial;
 
@@ -147,7 +147,7 @@ public class Voxelization : MonoBehaviour
         AdaptableTree tree = go.AddComponent<AdaptableTree>();
         tree.Init(this, position, pointCloudData, treeMaterial, treeHeight, nodeKillDistance, 
             nodeAttractionDistance, nodeSegmentLength, attractorsAmount, abortCollidingBranches, 
-            treeTubeVertexAmount, treeBaseThickness, treeStepThickness, treeMaxDiffThickness, unitSize / 2f);
+            treeTubeVertexAmount, treeBaseThickness, treePerChildThickness, treeMaxDiffThickness, unitSize / 2f);
         tree.TreeRegen();
     }
 
@@ -164,7 +164,7 @@ public class Voxelization : MonoBehaviour
                 freeUnits = GetFreeUnitsSphere(position, shapeData.sphereRadius);
                 break;
             case PointCloudShape.Ellipsoid:
-                freeUnits = GetFreeUnitsEllipsoid(position, shapeData.ellipsoidParams);
+                freeUnits = GetFreeUnitsEllipsoid(position, shapeData.ellipsoidSize);
                 break;
         }
 
@@ -210,14 +210,14 @@ public class Voxelization : MonoBehaviour
         return freeUnits.ToArray();
     }
 
-    public Unit[] GetFreeUnitsEllipsoid(Vector3 position, EllipsoidParams ellipsoidParams)
+    public Unit[] GetFreeUnitsEllipsoid(Vector3 position, Vector3 ellipsoidSize)
     {
         bool[] visitedTable = new bool[Mathf.RoundToInt(size.x * size.y * size.z / Mathf.Pow(unitSize, 3))];
         Queue<Vector3> toFill = new Queue<Vector3>();
         Vector3 bottomCenter = position + Vector3.up * halfUnitSizeVec.y;
         toFill.Enqueue(bottomCenter);
 
-        Vector3 ellipsoidCenter = position + Vector3.up * ellipsoidParams.b;
+        Vector3 ellipsoidCenter = position + Vector3.up * ellipsoidSize.y;
 
         List<Unit> freeUnits = new List<Unit>();
 
@@ -225,7 +225,7 @@ public class Voxelization : MonoBehaviour
         {
             Vector3 currPos = toFill.Dequeue();
 
-            if (!isInsideEllipsoid(currPos, ellipsoidCenter, ellipsoidParams) || !levelBounds.Contains(currPos) || visitedTable[WorldToGrid(currPos)])
+            if (!isInsideEllipsoid(currPos, ellipsoidCenter, ellipsoidSize) || !levelBounds.Contains(currPos) || visitedTable[WorldToGrid(currPos)])
                 continue;
 
             visitedTable[WorldToGrid(currPos)] = true;
@@ -292,12 +292,12 @@ public class Voxelization : MonoBehaviour
         return checkPosition.x * checkPosition.x + checkPosition.y * checkPosition.y + checkPosition.z * checkPosition.z <= radius * radius;
     }
 
-    public bool isInsideEllipsoid(Vector3 position, Vector3 ellipsoidCenter, EllipsoidParams ellipsoidParams)
+    public bool isInsideEllipsoid(Vector3 position, Vector3 ellipsoidCenter, Vector3 ellipsoidSize)
     {
         Vector3 checkPosition = position - ellipsoidCenter;
-        float ratioX = (checkPosition.x * checkPosition.x) / (ellipsoidParams.a * ellipsoidParams.a);
-        float ratioY = (checkPosition.y * checkPosition.y) / (ellipsoidParams.b * ellipsoidParams.b);
-        float ratioZ = (checkPosition.z * checkPosition.z) / (ellipsoidParams.c * ellipsoidParams.c);
+        float ratioX = (checkPosition.x * checkPosition.x) / (ellipsoidSize.x * ellipsoidSize.x);
+        float ratioY = (checkPosition.y * checkPosition.y) / (ellipsoidSize.y * ellipsoidSize.y);
+        float ratioZ = (checkPosition.z * checkPosition.z) / (ellipsoidSize.z * ellipsoidSize.z);
         return ratioX + ratioY + ratioZ <= 1;
     }
 

@@ -13,7 +13,7 @@ public struct PointCloudData
     public float sphereRadius;
 
     // For ellipsoid
-    public EllipsoidParams ellipsoidParams;
+    public Vector3 ellipsoidSize;
 
     // For droplet
 
