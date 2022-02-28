@@ -39,6 +39,7 @@ public class AdaptableTree : MonoBehaviour
     [HideInInspector]
     public Voxelization voxelization;
 
+    static float jitterAmount = .5f;
 
     GameObject builderBasis;
 
@@ -173,7 +174,9 @@ public class AdaptableTree : MonoBehaviour
                 Node node = nodes[i];
                 if (node.influencingAttractors.Count > 0)
                 {
-                    Vector3 nextPosition = node.position + node.GetAverageDirection() * segmentLength;
+                    float clcl = Random.Range(-jitterAmount, jitterAmount);
+                    Vector3 jitter = new Vector3(Random.Range(-jitterAmount, jitterAmount), Random.Range(-jitterAmount, jitterAmount), Random.Range(-jitterAmount, jitterAmount));
+                    Vector3 nextPosition = node.position + node.GetAverageDirection(jitter) * segmentLength;
 
                     // NOT IDEAL, BUT WORKS!!! :)
                     if (abortCollidingBranches && voxelization.GetUnit(nextPosition).occupied && i>6)

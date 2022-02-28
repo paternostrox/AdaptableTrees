@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Node
 {
@@ -22,7 +24,7 @@ public class Node
             directionFromParent = position - parent.position;
     }
 
-    public Vector3 GetAverageDirection()
+    public Vector3 GetAverageDirection(Vector3 jitter)
     {
         // Calculate average direction based on attractors influence
         Vector3 averageDirection = Vector3.zero;
@@ -31,8 +33,6 @@ public class Node
             averageDirection += (a.position - position).normalized;
         }
         // add jitter to avoid getting stuck
-        Vector3 jitter = new Vector3(Random.Range(-jitterAmount, jitterAmount), Random.Range(-jitterAmount, jitterAmount), Random.Range(-jitterAmount, jitterAmount));
-        Debug.Log("Jitter: " + jitter);
         averageDirection += jitter;
 
         averageDirection.Normalize();
@@ -42,7 +42,7 @@ public class Node
 
     public Node GetNextNode(float segmentLength)
     {
-        Vector3 nextPosition = position + GetAverageDirection() * segmentLength;
+        Vector3 nextPosition = position + GetAverageDirection(Vector3.zero) * segmentLength;
 
         return new Node(this, nextPosition);
     }
