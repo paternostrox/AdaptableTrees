@@ -39,7 +39,7 @@ public class AdaptableTree : MonoBehaviour
     [HideInInspector]
     public Voxelization voxelization;
 
-    static float jitterAmount = .5f;
+    static float jitterAmount = .3f;
 
     GameObject builderBasis;
 
@@ -125,6 +125,12 @@ public class AdaptableTree : MonoBehaviour
         {
             Attractor attractor = new Attractor(transform.position + Vector3.up * h);
             attractors.Add(attractor);
+        }
+
+        if(crownUnits.Length < 1)
+        {
+            Debug.LogWarning("Tree is too deep into an obstacle, try changing the location.");
+            return;
         }
 
         // Add crown attractors
