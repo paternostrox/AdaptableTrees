@@ -127,25 +127,26 @@ public class AdaptableTree : MonoBehaviour
         }
 
         // Add crown attractors
-        //for(int i = 0; i < attractorsAmount; i++)
-        //{
-        //    int randomUnitIndex = Random.Range(0, crownUnits.Length);
-        //    Vector3 attractorPos = crownUnits[randomUnitIndex].position + new Vector3(Random.Range(-unitHalfSize, unitHalfSize),
-        //            Random.Range(-unitHalfSize, unitHalfSize), Random.Range(-unitHalfSize, unitHalfSize));
-        //    Attractor attractor = new Attractor(attractorPos);
-        //}
-
-        int amountPerUnit = Mathf.CeilToInt(((float)attractorsAmount) / crownUnits.Length);
-        foreach (Unit unit in crownUnits)
+        for (int i = 0; i < attractorsAmount; i++)
         {
-            for (int i = 0; i < amountPerUnit; i++)
-            {
-                Vector3 attractorPos = unit.position + new Vector3(Random.Range(-unitHalfSize, unitHalfSize),
+            int randomUnitIndex = Random.Range(0, crownUnits.Length);
+            Vector3 attractorPos = crownUnits[randomUnitIndex].position + new Vector3(Random.Range(-unitHalfSize, unitHalfSize),
                     Random.Range(-unitHalfSize, unitHalfSize), Random.Range(-unitHalfSize, unitHalfSize));
-                Attractor attractor = new Attractor(attractorPos);
-                attractors.Add(attractor);
-            }
+            Attractor attractor = new Attractor(attractorPos);
+            attractors.Add(attractor);
         }
+
+        //int amountPerUnit = Mathf.CeilToInt(((float)attractorsAmount) / crownUnits.Length);
+        //foreach (Unit unit in crownUnits)
+        //{
+        //    for (int i = 0; i < amountPerUnit; i++)
+        //    {
+        //        Vector3 attractorPos = unit.position + new Vector3(Random.Range(-unitHalfSize, unitHalfSize),
+        //            Random.Range(-unitHalfSize, unitHalfSize), Random.Range(-unitHalfSize, unitHalfSize));
+        //        Attractor attractor = new Attractor(attractorPos);
+        //        attractors.Add(attractor);
+        //    }
+        //}
 
         if (debugAttractors)
             DebugAttractors(attractors);
@@ -186,7 +187,8 @@ public class AdaptableTree : MonoBehaviour
             }
             if (nodes.Count == nodesCount)
             {
-                Debug.LogWarning("Not every attraction points was terminated, maybe parameters should be ajusted.");
+                // ALL ATTRACTORS LEFT ARE UNREACHABLE!!
+                //Debug.LogWarning("Not every attraction points was terminated (" + attractors.Count + " left), maybe parameters should be ajusted.");
                 break;
             }
 

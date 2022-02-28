@@ -126,7 +126,7 @@ public class Voxelization : MonoBehaviour
             Ray ray = HandleUtility.GUIPointToWorldRay(e.mousePosition);
             if(Physics.Raycast(ray, out hit))
             {
-                print("HIT at " + hit.point);
+                //print("HIT at " + hit.point);
                 TryGenerateTree(hit.point + Vector3.up * .001f);
             }
         }
