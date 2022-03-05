@@ -39,9 +39,10 @@ public class VoxelizationEditor : Editor
         // TREE
         GUILayout.Label("Tree Settings");
 
-        sceneManager.treeTubeVertexAmount = EditorGUILayout.IntField("Tube Vertex Amount", sceneManager.treeTubeVertexAmount);
 
         sceneManager.abortCollidingBranches = EditorGUILayout.Toggle("Abort Colliding Branches", sceneManager.abortCollidingBranches);
+
+        sceneManager.treeHeight = EditorGUILayout.FloatField("Trunk Height", sceneManager.treeHeight);
 
         sceneManager.attractorsAmount = EditorGUILayout.IntField("Attractors Amount", sceneManager.attractorsAmount);
 
@@ -58,6 +59,8 @@ public class VoxelizationEditor : Editor
         sceneManager.treeMaxDiffThickness = EditorGUILayout.FloatField("Tree Max Diff Thickness", sceneManager.treeMaxDiffThickness);
 
         sceneManager.treeMaterial = (Material)EditorGUILayout.ObjectField("Material", sceneManager.treeMaterial, typeof(Material));
+
+        sceneManager.treeTubeVertexAmount = EditorGUILayout.IntField("Tube Vertex Amount", sceneManager.treeTubeVertexAmount);
 
         foldout = EditorGUILayout.Foldout(foldout, "Point Cloud Data");
 

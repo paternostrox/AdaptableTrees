@@ -12,19 +12,19 @@ using Random = UnityEngine.Random;
 public class AdaptableTree : MonoBehaviour
 {
     public bool showCrown = false;
-
-    public PointCloudData pointCloudData;
-    public float height;
-    public float killDistance;
-    public float attractionDistance;
-    public float segmentLength;
-    public int attractorsAmount;
     public bool abortCollidingBranches = true;
+    public float height;
+    public int attractorsAmount;
+    public float attractionDistance;
+    public float killDistance;
+    public float segmentLength;
 
-    public int tubeVertexAmount;
     public float baseThickness;
     public float perChildThickness;
     public float maxDiffThickness;
+    public int tubeVertexAmount;
+    [HideInInspector]
+    public PointCloudData pointCloudData;
     float unitHalfSize;
     Vector3 unitVec;
 
@@ -66,7 +66,7 @@ public class AdaptableTree : MonoBehaviour
 
     public void TreeRegen()
     {
-        
+        CheckIntegrity();
 
         // Clear current tree
         nodes.Clear();
@@ -505,7 +505,7 @@ public class AdaptableTree : MonoBehaviour
         {
             for (int i = 0; i < crownUnits.Length; i++)
             {
-                Gizmos.color = Color.cyan;
+                Gizmos.color = new Color(0,1,1,0.5f);
                 Gizmos.DrawCube(crownUnits[i].position, unitVec);
             }
         }
