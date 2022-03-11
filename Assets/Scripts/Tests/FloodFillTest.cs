@@ -6,12 +6,12 @@ using UnityEngine;
 #if(UNITY_EDITOR)
 
 [ExecuteInEditMode]
-public class Voxelization : MonoBehaviour
+public class FloodFillTest : MonoBehaviour
 {
     [HideInInspector] public Vector3Int size;
     [HideInInspector] public float unitSize = 1;
     [HideInInspector] public Vector3 floodStartPos;
-    [HideInInspector] public Bounds regionBounds;
+    Bounds levelBounds;
     Vector3 halfUnitSizeVec;
     Vector3 offset;
 
@@ -22,12 +22,12 @@ public class Voxelization : MonoBehaviour
     [HideInInspector] public bool showFree = false;
 
     private Unit[] units;
+    private Unit[] noFloodUnits;
 
     [HideInInspector] public int treeTubeVertexAmount = 5;
     [HideInInspector] public float treeHeight = 10f;
     public PointCloudData pointCloudData;
     [HideInInspector] public bool abortCollidingBranches = true;
-    [HideInInspector] public bool animateGrowth = false;
 
     [HideInInspector] public float nodeKillDistance = .2f;
     [HideInInspector] public float nodeAttractionDistance = 10f;
@@ -50,14 +50,39 @@ public class Voxelization : MonoBehaviour
         ProcessLevel();
     }
 
+    public void FloodVsNormal()
+    {
+        int noFloodFree = 0;
+        int floodFree = 0;
+        for (int i = 0; i < units.Length; i++)
+        {
+            if (!units[i].occupied)
+                floodFree++;
+            if (!noFloodUnits[i].occupied)
+                noFloodFree++;
+        }
+
+        print("Normal Vox has " + noFloodFree + " free, Flood Vox has " + floodFree + " free.");
+
+        for (int i = 0; i < units.Length; i++)
+        {
+            if (!units[i].occupied)
+                freeNormalUnits.Remove(i);
+        }
+    }
+
+    Dictionary<int, Unit> freeNormalUnits;
+
     public void ProcessLevel()
     {
         units = new Unit[Mathf.RoundToInt(size.x * size.y * size.z / Mathf.Pow(unitSize, 3))];
+        noFloodUnits = new Unit[Mathf.RoundToInt(size.x * size.y * size.z / Mathf.Pow(unitSize, 3))];
+        freeNormalUnits = new Dictionary<int, Unit>();
         Vector3 halfSize = size;
         halfSize = halfSize / 2f;
         offset = transform.position - new Vector3(halfSize.x, 0, halfSize.z);
         float halfUnitSize = unitSize / 2f;
-        regionBounds = new Bounds(transform.position + Vector3.up * halfSize.y, size);
+        levelBounds = new Bounds(transform.position + Vector3.up * halfSize.y, size);
         //Vector3 halfUnitSizeVec = Vector3.one * halfUnitSize;
         halfUnitSizeVec = Vector3.one * halfUnitSize * .99f;
         for (float i = halfUnitSize; i < size.x; i+=unitSize)
@@ -67,9 +92,13 @@ public class Voxelization : MonoBehaviour
                 for (float k = halfUnitSize; k < size.z; k += unitSize)
                 {
                     Vector3 pos = new Vector3(i, j, k) + offset;
-                    //bool isOccupied = Physics.CheckBox(pos, halfUnitSizeVec);
                     Unit unit = new Unit(pos);
                     units[WorldToGrid(pos)] = unit;
+                    bool isOccupied = Physics.CheckBox(pos, halfUnitSizeVec);
+                    Unit noFloodUnit = new Unit(pos, isOccupied);
+                    noFloodUnits[WorldToGrid(pos)] = noFloodUnit;
+                    if (!isOccupied)
+                        freeNormalUnits.Add(WorldToGrid(pos), noFloodUnit);
                 }
             }
         }
@@ -78,11 +107,13 @@ public class Voxelization : MonoBehaviour
         //Vector3 floodStartPos = levelBounds.max - halfUnitSizeVec;
         FloodFill(floodStartPos);
 
-        AdaptableTree[] childTrees = transform.GetComponentsInChildren<AdaptableTree>();
-        foreach(AdaptableTree t in childTrees)
-        {
-            t.voxelization = this;
-        }
+        FloodVsNormal();
+
+        //AdaptableTree[] childTrees = transform.GetComponentsInChildren<AdaptableTree>();
+        //foreach(AdaptableTree t in childTrees)
+        //{
+        //    t.voxelization = this;
+        //}
     }
 
     private void FloodFill(Vector3 pos)
@@ -95,7 +126,7 @@ public class Voxelization : MonoBehaviour
         {
             Vector3 currPos = toFill.Dequeue();
 
-            if (!regionBounds.Contains(currPos))
+            if (!levelBounds.Contains(currPos))
                 continue;
 
             if (visitedTable[WorldToGrid(currPos)])
@@ -118,22 +149,18 @@ public class Voxelization : MonoBehaviour
 
     }
 
-    float lastEventTime = 0f;
-
     public void MouseInteraction()
     {
         Event e = Event.current;
         if (e.type == EventType.MouseDown && e.button == 0)
         {
-            if (Time.time - lastEventTime < 0.05f)
-                return;
             RaycastHit hit;
             Ray ray = HandleUtility.GUIPointToWorldRay(e.mousePosition);
             if(Physics.Raycast(ray, out hit))
             {
+                //print("HIT at " + hit.point);
                 TryGenerateTree(hit.point + Vector3.up * .001f);
             }
-            lastEventTime = Time.time;
         }
     }
 
@@ -145,14 +172,14 @@ public class Voxelization : MonoBehaviour
         //    Debug.Log("Cannot place tree roots on obstacles!");
         //    return;
         //}
-        float halfUnitSize = unitSize / 2f;
-        GameObject go = new GameObject("Tree");
-        go.transform.SetParent(transform);
-        AdaptableTree tree = go.AddComponent<AdaptableTree>();
-        tree.Init(this, position, pointCloudData, treeMaterial, treeHeight, nodeKillDistance, 
-            nodeAttractionDistance, nodeSegmentLength, attractorsAmount, abortCollidingBranches, animateGrowth, 
-            treeTubeVertexAmount, treeBaseThickness, treePerChildThickness, treeMaxDiffThickness, unitSize / 2f);
-        tree.TreeRegen();
+        //float halfUnitSize = unitSize / 2f;
+        //GameObject go = new GameObject("Tree");
+        //go.transform.SetParent(transform);
+        //AdaptableTree tree = go.AddComponent<AdaptableTree>();
+        //tree.Init(this, position, pointCloudData, treeMaterial, treeHeight, nodeKillDistance, 
+        //    nodeAttractionDistance, nodeSegmentLength, attractorsAmount, abortCollidingBranches, 
+        //    treeTubeVertexAmount, treeBaseThickness, treePerChildThickness, treeMaxDiffThickness, unitSize / 2f);
+        //tree.TreeRegen();
     }
 
     // Note: 'position' is the position of trunk highest point
@@ -191,7 +218,7 @@ public class Voxelization : MonoBehaviour
         {
             Vector3 currPos = toFill.Dequeue();
 
-            if (!isInsideSphere(currPos, sphereCenter, radius) || !regionBounds.Contains(currPos) || visitedTable[WorldToGrid(currPos)])
+            if (!isInsideSphere(currPos, sphereCenter, radius) || !levelBounds.Contains(currPos) || visitedTable[WorldToGrid(currPos)])
                 continue;
 
             visitedTable[WorldToGrid(currPos)] = true;
@@ -229,7 +256,7 @@ public class Voxelization : MonoBehaviour
         {
             Vector3 currPos = toFill.Dequeue();
 
-            if (!isInsideEllipsoid(currPos, ellipsoidCenter, ellipsoidSize) || !regionBounds.Contains(currPos) || visitedTable[WorldToGrid(currPos)])
+            if (!isInsideEllipsoid(currPos, ellipsoidCenter, ellipsoidSize) || !levelBounds.Contains(currPos) || visitedTable[WorldToGrid(currPos)])
                 continue;
 
             visitedTable[WorldToGrid(currPos)] = true;
@@ -267,7 +294,7 @@ public class Voxelization : MonoBehaviour
         {
             Vector3 currPos = toFill.Dequeue();
 
-            if (!treeBounds.Contains(currPos) || !regionBounds.Contains(currPos) || visitedTable[WorldToGrid(currPos)])
+            if (!treeBounds.Contains(currPos) || !levelBounds.Contains(currPos) || visitedTable[WorldToGrid(currPos)])
                 continue;
 
             visitedTable[WorldToGrid(currPos)] = true;
@@ -358,25 +385,34 @@ public class Voxelization : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawWireCube(center, size);
 
-        if (units == null)
+        if (noFloodUnits == null)
             return;
 
-        if (showOccupied || showFree)
+        if(showFree)
         {
-            for(int i=0; i<units.Length;i++)
+            foreach(KeyValuePair<int, Unit> kv in freeNormalUnits)
             {
-                if (units[i].occupied && showOccupied)
-                {
-                    Gizmos.color = occupiedColor;
-                    Gizmos.DrawCube(units[i].position, unitSizeVec);
-                }
-                else if (showFree)
-                {
-                    Gizmos.color = freeColor;
-                    Gizmos.DrawCube(units[i].position, unitSizeVec);
-                }
+                Gizmos.color = freeColor;
+                Gizmos.DrawCube(kv.Value.position, unitSizeVec);
             }
         }
+
+        //if (showOccupied || showFree)
+        //{
+        //    for(int i=0; i< noFloodUnits.Length;i++)
+        //    {
+        //        if (noFloodUnits[i].occupied && showOccupied)
+        //        {
+        //            Gizmos.color = occupiedColor;
+        //            Gizmos.DrawCube(noFloodUnits[i].position, unitSizeVec);
+        //        }
+        //        else if (showFree)
+        //        {
+        //            Gizmos.color = freeColor;
+        //            Gizmos.DrawCube(noFloodUnits[i].position, unitSizeVec);
+        //        }
+        //    }
+        //}
     }
 }
 

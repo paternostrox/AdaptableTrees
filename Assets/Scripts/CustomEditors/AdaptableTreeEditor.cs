@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(AdaptableTree))]
-public class TreeEditor : Editor
+public class AdaptableTreeEditor : Editor
 {
     bool foldout = true;
 

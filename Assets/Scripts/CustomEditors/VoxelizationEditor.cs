@@ -15,52 +15,54 @@ public class VoxelizationEditor : Editor
         //GUIStyle labelStyle = new GUIStyle(GUI.skin.label);
         //labelStyle.alignment = TextAnchor.MiddleCenter;
 
-        Voxelization sceneManager = (Voxelization)target;
+        Voxelization voxelization = (Voxelization)target;
 
         // AMBIENT
 
         GUILayout.Label("Voxelization Settings");
 
-        sceneManager.size = EditorGUILayout.Vector3IntField("Size", sceneManager.size);
+        voxelization.size = EditorGUILayout.Vector3IntField("Size", voxelization.size);
 
-        sceneManager.unitSize = EditorGUILayout.FloatField("Unit Size", sceneManager.unitSize);
+        voxelization.unitSize = EditorGUILayout.FloatField("Unit Size", voxelization.unitSize);
 
-        sceneManager.floodStartPos = EditorGUILayout.Vector3Field("Flood Start Pos", sceneManager.floodStartPos);
+        voxelization.floodStartPos = EditorGUILayout.Vector3Field("Flood Start Pos", voxelization.floodStartPos);
 
-        sceneManager.showOccupied = EditorGUILayout.Toggle("Show Occupied Voxels", sceneManager.showOccupied);
+        voxelization.showOccupied = EditorGUILayout.Toggle("Show Occupied Voxels", voxelization.showOccupied);
 
-        sceneManager.showFree = EditorGUILayout.Toggle("Show Free Voxels", sceneManager.showFree);
+        voxelization.showFree = EditorGUILayout.Toggle("Show Free Voxels", voxelization.showFree);
 
         if (GUILayout.Button("Rebuild Voxelization"))
         {
-            sceneManager.ProcessLevel();
+            voxelization.ProcessLevel();
         }
 
         // TREE
         GUILayout.Label("Tree Settings");
 
 
-        sceneManager.abortCollidingBranches = EditorGUILayout.Toggle("Abort Colliding Branches", sceneManager.abortCollidingBranches);
+        voxelization.abortCollidingBranches = EditorGUILayout.Toggle("Abort Colliding Branches", voxelization.abortCollidingBranches);
 
-        sceneManager.treeHeight = EditorGUILayout.FloatField("Trunk Height", sceneManager.treeHeight);
+        voxelization.animateGrowth = EditorGUILayout.Toggle("Animate Growth", voxelization.animateGrowth);
 
-        sceneManager.attractorsAmount = EditorGUILayout.IntField("Attractors Amount", sceneManager.attractorsAmount);
+        voxelization.treeHeight = EditorGUILayout.FloatField("Trunk Height", voxelization.treeHeight);
 
-        sceneManager.nodeAttractionDistance = EditorGUILayout.FloatField("Node Attraction Distance", sceneManager.nodeAttractionDistance);
+        voxelization.attractorsAmount = EditorGUILayout.IntField("Attractors Amount", voxelization.attractorsAmount);
 
-        sceneManager.nodeKillDistance = EditorGUILayout.FloatField("Node Kill Distance", sceneManager.nodeKillDistance);
+        voxelization.nodeAttractionDistance = EditorGUILayout.FloatField("Node Attraction Distance", voxelization.nodeAttractionDistance);
 
-        sceneManager.nodeSegmentLength = EditorGUILayout.FloatField("Node Segment Length", sceneManager.nodeSegmentLength);
+        voxelization.nodeKillDistance = EditorGUILayout.FloatField("Node Kill Distance", voxelization.nodeKillDistance);
 
-        sceneManager.treeBaseThickness = EditorGUILayout.FloatField("Tree Base Thickness", sceneManager.treeBaseThickness);
+        voxelization.nodeSegmentLength = EditorGUILayout.FloatField("Node Segment Length", voxelization.nodeSegmentLength);
 
-        sceneManager.treePerChildThickness = EditorGUILayout.FloatField("Tree Per Child Thickness", sceneManager.treePerChildThickness);
+        voxelization.treeBaseThickness = EditorGUILayout.FloatField("Tree Base Thickness", voxelization.treeBaseThickness);
 
-        sceneManager.treeMaxDiffThickness = EditorGUILayout.FloatField("Tree Max Diff Thickness", sceneManager.treeMaxDiffThickness);
+        voxelization.treePerChildThickness = EditorGUILayout.FloatField("Tree Per Child Thickness", voxelization.treePerChildThickness);
 
-        sceneManager.treeMaterial = (Material)EditorGUILayout.ObjectField("Material", sceneManager.treeMaterial, typeof(Material));
+        voxelization.treeMaxDiffThickness = EditorGUILayout.FloatField("Tree Max Diff Thickness", voxelization.treeMaxDiffThickness);
 
-        sceneManager.treeTubeVertexAmount = EditorGUILayout.IntField("Tube Vertex Amount", sceneManager.treeTubeVertexAmount);
+        voxelization.treeMaterial = (Material)EditorGUILayout.ObjectField("Material", voxelization.treeMaterial, typeof(Material));
+
+        voxelization.treeTubeVertexAmount = EditorGUILayout.IntField("Tube Vertex Amount", voxelization.treeTubeVertexAmount);
 
         foldout = EditorGUILayout.Foldout(foldout, "Point Cloud Data");
 
@@ -68,15 +70,15 @@ public class VoxelizationEditor : Editor
         {
             var level = EditorGUI.indentLevel;
             EditorGUI.indentLevel++;
-            sceneManager.pointCloudData.cloudShape = (PointCloudShape) EditorGUILayout.EnumPopup("Cloud Shape", sceneManager.pointCloudData.cloudShape);
+            voxelization.pointCloudData.cloudShape = (PointCloudShape) EditorGUILayout.EnumPopup("Cloud Shape", voxelization.pointCloudData.cloudShape);
 
-            if (sceneManager.pointCloudData.cloudShape == PointCloudShape.Box)
-                sceneManager.pointCloudData.boxSize = EditorGUILayout.Vector3Field("Box Size", sceneManager.pointCloudData.boxSize);
-            if (sceneManager.pointCloudData.cloudShape == PointCloudShape.Sphere || sceneManager.pointCloudData.cloudShape == PointCloudShape.HalfSphere)
-                sceneManager.pointCloudData.sphereRadius = EditorGUILayout.FloatField("Sphere Radius", sceneManager.pointCloudData.sphereRadius);
-            if (sceneManager.pointCloudData.cloudShape == PointCloudShape.Ellipsoid || sceneManager.pointCloudData.cloudShape == PointCloudShape.HalfEllipsoid)
+            if (voxelization.pointCloudData.cloudShape == PointCloudShape.Box)
+                voxelization.pointCloudData.boxSize = EditorGUILayout.Vector3Field("Box Size", voxelization.pointCloudData.boxSize);
+            if (voxelization.pointCloudData.cloudShape == PointCloudShape.Sphere || voxelization.pointCloudData.cloudShape == PointCloudShape.HalfSphere)
+                voxelization.pointCloudData.sphereRadius = EditorGUILayout.FloatField("Sphere Radius", voxelization.pointCloudData.sphereRadius);
+            if (voxelization.pointCloudData.cloudShape == PointCloudShape.Ellipsoid || voxelization.pointCloudData.cloudShape == PointCloudShape.HalfEllipsoid)
             {
-                sceneManager.pointCloudData.ellipsoidSize = EditorGUILayout.Vector3Field("Ellipsoid Size", sceneManager.pointCloudData.ellipsoidSize);
+                voxelization.pointCloudData.ellipsoidSize = EditorGUILayout.Vector3Field("Ellipsoid Size", voxelization.pointCloudData.ellipsoidSize);
                 //GUILayout.Label("Ellipsoid Parameters");
                 //sceneManager.pointCloudData.ellipsoidParams.a = EditorGUILayout.FloatField("A", sceneManager.pointCloudData.ellipsoidParams.a);
                 //sceneManager.pointCloudData.ellipsoidParams.b = EditorGUILayout.FloatField("B", sceneManager.pointCloudData.ellipsoidParams.b);
@@ -99,11 +101,11 @@ public class VoxelizationEditor : Editor
             buildTrees = GUILayout.Toggle(buildTrees, "Build Trees (Click to Stop)", "Button");
         }
 
-        if (sceneManager.useCustomVolume)
+        if (voxelization.useCustomVolume)
         {
-            sceneManager.treeGenVolume = (GameObject)EditorGUILayout.ObjectField("Generation Volume", sceneManager.treeGenVolume, typeof(GameObject), true);
-            LayerMask tempMask = EditorGUILayout.MaskField("Volume Mask",InternalEditorUtility.LayerMaskToConcatenatedLayersMask(sceneManager.treeGenVolumeMask), InternalEditorUtility.layers);
-            sceneManager.treeGenVolumeMask = InternalEditorUtility.ConcatenatedLayersMaskToLayerMask(tempMask);
+            voxelization.treeGenVolume = (GameObject)EditorGUILayout.ObjectField("Generation Volume", voxelization.treeGenVolume, typeof(GameObject), true);
+            LayerMask tempMask = EditorGUILayout.MaskField("Volume Mask",InternalEditorUtility.LayerMaskToConcatenatedLayersMask(voxelization.treeGenVolumeMask), InternalEditorUtility.layers);
+            voxelization.treeGenVolumeMask = InternalEditorUtility.ConcatenatedLayersMaskToLayerMask(tempMask);
         }
     }
 
@@ -111,8 +113,8 @@ public class VoxelizationEditor : Editor
     {
         if(buildTrees)
         {
-            Voxelization sceneManager = (Voxelization)target;
-            sceneManager.MouseInteraction();
+            Voxelization voxelization = (Voxelization)target;
+            voxelization.MouseInteraction();
         }
     }
 }

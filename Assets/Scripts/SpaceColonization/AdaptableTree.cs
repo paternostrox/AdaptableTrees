@@ -12,6 +12,7 @@ using Random = UnityEngine.Random;
 public class AdaptableTree : MonoBehaviour
 {
     public bool showCrown = false;
+    public bool animateGrowth = false;
     public bool abortCollidingBranches = true;
     public float height;
     public int attractorsAmount;
@@ -61,7 +62,7 @@ public class AdaptableTree : MonoBehaviour
         if (killDistance > attractionDistance)
             throw new Exception("Tree could not be built. KillDistance should be smaller than AttractionDistance.");
         if (killDistance < segmentLength)
-            throw new Exception("Tree could not be built. KillDistance should be bigger than AttractionDistance.");
+            throw new Exception("Tree could not be built. KillDistance should be bigger than Segment Length.");
     }
 
     public void TreeRegen()
@@ -79,13 +80,16 @@ public class AdaptableTree : MonoBehaviour
         GenerateAttractors();
 
         BuildStructure();
-        BuildGeometrySync();
-        //EditorCoroutineUtility.StartCoroutine(BuildGeometryAsync(), this);
+
+        if(animateGrowth)
+            EditorCoroutineUtility.StartCoroutine(BuildGeometryAsync(), this);
+        else
+            BuildGeometrySync();
     }
 
     public void Init(Voxelization voxelization, Vector3 position, PointCloudData pointCloudData, Material material,
         float height, float killDistance, float attractionDistance, 
-        float segmentLength, int attractorsAmount, bool abortCollidingBranches, 
+        float segmentLength, int attractorsAmount, bool abortCollidingBranches, bool animateGrowth,
         int tubeVertexAmount, float tubeRadius, float perChildThickness, float maxDiffThickness, float unitHalfSize)
     {
         // INIT
@@ -106,6 +110,7 @@ public class AdaptableTree : MonoBehaviour
         this.segmentLength = segmentLength;
         this.attractorsAmount = attractorsAmount;
         this.abortCollidingBranches = abortCollidingBranches;
+        this.animateGrowth = animateGrowth;
 
         this.baseThickness = tubeRadius;
         this.perChildThickness = perChildThickness;
@@ -142,18 +147,6 @@ public class AdaptableTree : MonoBehaviour
             Attractor attractor = new Attractor(attractorPos);
             attractors.Add(attractor);
         }
-
-        //int amountPerUnit = Mathf.CeilToInt(((float)attractorsAmount) / crownUnits.Length);
-        //foreach (Unit unit in crownUnits)
-        //{
-        //    for (int i = 0; i < amountPerUnit; i++)
-        //    {
-        //        Vector3 attractorPos = unit.position + new Vector3(Random.Range(-unitHalfSize, unitHalfSize),
-        //            Random.Range(-unitHalfSize, unitHalfSize), Random.Range(-unitHalfSize, unitHalfSize));
-        //        Attractor attractor = new Attractor(attractorPos);
-        //        attractors.Add(attractor);
-        //    }
-        //}
 
         if (debugAttractors)
             DebugAttractors(attractors);
@@ -487,7 +480,7 @@ public class AdaptableTree : MonoBehaviour
         return vertexPos;
     }
 
-    public bool debugAttractors;
+    [HideInInspector] public bool debugAttractors;
     GameObject debugObj;
     private void DebugAttractors(List<Attractor> attractors)
     {
