@@ -54,21 +54,31 @@ public class FloodFillTest : MonoBehaviour
     {
         int noFloodFree = 0;
         int floodFree = 0;
+        int noFloodOccupied = 0;
+        int floodOccupied = 0;
         for (int i = 0; i < units.Length; i++)
         {
-            if (!units[i].occupied)
+            if (units[i].occupied)
+                floodOccupied++;
+            else
                 floodFree++;
-            if (!noFloodUnits[i].occupied)
+
+            if (noFloodUnits[i].occupied)
+                noFloodOccupied++;
+            else
                 noFloodFree++;
         }
 
         print("Normal Vox has " + noFloodFree + " free, Flood Vox has " + floodFree + " free.");
+        print("Normal Vox has " + noFloodOccupied + " occupied, Flood Vox has " + floodOccupied + " occupied.");
 
         for (int i = 0; i < units.Length; i++)
         {
             if (!units[i].occupied)
                 freeNormalUnits.Remove(i);
         }
+
+
     }
 
     Dictionary<int, Unit> freeNormalUnits;
@@ -388,31 +398,31 @@ public class FloodFillTest : MonoBehaviour
         if (noFloodUnits == null)
             return;
 
-        if(showFree)
-        {
-            foreach(KeyValuePair<int, Unit> kv in freeNormalUnits)
-            {
-                Gizmos.color = freeColor;
-                Gizmos.DrawCube(kv.Value.position, unitSizeVec);
-            }
-        }
-
-        //if (showOccupied || showFree)
+        //if(showFree)
         //{
-        //    for(int i=0; i< noFloodUnits.Length;i++)
+        //    foreach(KeyValuePair<int, Unit> kv in freeNormalUnits)
         //    {
-        //        if (noFloodUnits[i].occupied && showOccupied)
-        //        {
-        //            Gizmos.color = occupiedColor;
-        //            Gizmos.DrawCube(noFloodUnits[i].position, unitSizeVec);
-        //        }
-        //        else if (showFree)
-        //        {
-        //            Gizmos.color = freeColor;
-        //            Gizmos.DrawCube(noFloodUnits[i].position, unitSizeVec);
-        //        }
+        //        Gizmos.color = freeColor;
+        //        Gizmos.DrawCube(kv.Value.position, unitSizeVec);
         //    }
         //}
+
+        if (showOccupied || showFree)
+        {
+            for (int i = 0; i < units.Length; i++)
+            {
+                if (noFloodUnits[i].occupied && showOccupied)
+                {
+                    Gizmos.color = occupiedColor;
+                    Gizmos.DrawCube(units[i].position, unitSizeVec);
+                }
+                else if (showFree)
+                {
+                    Gizmos.color = freeColor;
+                    Gizmos.DrawCube(units[i].position, unitSizeVec);
+                }
+            }
+        }
     }
 }
 
