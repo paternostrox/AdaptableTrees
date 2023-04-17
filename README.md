@@ -24,7 +24,7 @@ Basic setup:
 5) The tree mesh is procedurally generated (and animated) based on the space colonization algorithm and a few extra constraints. If the user is not satisfied by the result, parameters can be altered and a new tree can be generated, also respecting the obstacles.
 ![tree-over-obstacle3](https://user-images.githubusercontent.com/19597048/232607769-d675287e-aff9-4e5f-b8b4-33eaba458e18.png)
 
-   Make sure to play with the parameters, different parameters can generate very different structures!
+   Make sure to play with the parameters, tiny ajustments can generate very different structures!
 ![tree-adjust-before](https://user-images.githubusercontent.com/19597048/232617707-493d08fd-c54d-4db1-9881-fb7412735b7e.png)
 ![tree-adjust-after](https://user-images.githubusercontent.com/19597048/232617717-54588cf0-70a9-41f6-b23f-902a6df942f2.png)
 
