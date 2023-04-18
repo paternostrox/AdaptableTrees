@@ -1,7 +1,7 @@
 # AdaptableTrees
 Repository for AdaptableTrees project, a product of my graduation thesis.
  
-Adaptable Trees is a geometry synthesis tool for Unity. It is useful for creating beautiful customizable trees and bushes (or some other branching structure) considering obstacles in any preexisting 3D model. Until now, the tool does not support the creation of foliage.
+Adaptable Trees is a mesh synthesis tool for Unity. It is useful for creating beautiful customizable trees and bushes (or some other branching structure) considering obstacles in any preexisting 3D model. Until now, the tool does not support the creation of foliage.
 
 Full description:
 
