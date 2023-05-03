@@ -4,7 +4,7 @@ Adaptable Trees is a mesh synthesis tool for Unity and a product of my graduatio
 
 Based on the Space Colonization algorithm, the method uses multiple voxelizations to identify obstacles in a 3D environment and comprehend different levels of detail. The method uses a flood fill algorithm to clusterize free voxels and reliably identify obstacles. The purpose of this work is to propose a good alternative to tree synthesis in large amounts and low cost, automating tree adaptability and reducing the need for meticulous artistic controls, without demanding from the user any artistic or coding background.
 
-## Basic setup:
+## :deciduous_tree: Basic setup:
 
 1) The user imports a 3D model and sets one or more voxelizations for the model. It is possible to set different voxelizations for different areas.
 ![vox-voxset](https://user-images.githubusercontent.com/19597048/232611805-1732fb63-a443-4f49-b60e-4edd9440738c.png)
