@@ -1,6 +1,6 @@
 # AdaptableTrees
  
-Adaptable Trees is a mesh synthesis tool for Unity and a product of my graduation thesis. It is useful for creating beautiful customizable trees and bushes (or some other branching structure) considering obstacles in any preexisting 3D model. Until now, the tool does not support the creation of foliage.
+Adaptable Trees is a mesh synthesis tool for Unity and a product of my graduation thesis. It is useful for creating beautiful customizable trees and bushes (or some other branching structure) considering obstacles in any preexisting 3D model. **Until now, the tool does not support the creation of foliage.** Sure would be nice if some hero made that contribution (maybe it's you? :eyes:).
 
 Based on the Space Colonization algorithm, the method uses multiple voxelizations to identify obstacles in a 3D environment and comprehend different levels of detail. The method uses a flood fill algorithm to clusterize free voxels and reliably identify obstacles. The purpose of this work is to propose a good alternative to tree synthesis in large amounts and low cost, automating tree adaptability and reducing the need for meticulous artistic controls, without demanding from the user any artistic or coding background.
 
@@ -26,4 +26,11 @@ Based on the Space Colonization algorithm, the method uses multiple voxelization
 ![tree-adjust-after](https://user-images.githubusercontent.com/19597048/232617717-54588cf0-70a9-41f6-b23f-902a6df942f2.png)
 
 6) When you are done, you can also export the new forested environment to any other engine or modelling tool using Unity's FBX Exporter.
+
+## :seedling: How to contribute
+
+1. Fork this [repository](https://github.com/paternostrox/AdaptableTrees).
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and test them thoroughly.
+4. Submit a [pull request](https://github.com/paternostrox/AdaptableTrees/pulls) with a clear description of your changes.
 
